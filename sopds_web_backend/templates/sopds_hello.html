@@ -1,12 +1,36 @@
 {% extends "sopds_main.html" %}
 {% load i18n %}
 
-{% block ext-body %}
+{% block body %}
 <div class="row">
 <div class="small-12 medium-8 large-8 small-centered columns">
-<h3 style="text-align:center;">{% trans "Hello" %} {% if user.is_authenticated %}{{ user.username }}{% endif %}{% if not user.is_authenticated %}{% trans "Guest" %}{% endif %} !</h3>
+<h3 style="text-align:center;">{% trans "Hello" %} {% if user.is_authenticated %}{{ user.username }}{% endif %}{% if not user.is_authenticated %}{% trans "Guest" %}{% endif %} ! <img src="/static/images/homelib.jpg"></h3>
 <p style="text-align:justify;">
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% trans "Simple OPDS Catalog - is a free program for Linux and Windows, which allows for the rapid creation of electronic OPDS-catalog books. OPDS (Open Publication Distribution System) directory allows you to access your library through the Internet with many devices for reading electronic books, tablets, smartphones, etc. More about the program can be found on the project website:" %} <a href="http://www.sopds.ru/"> www.sopds.ru</a>.
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Это домашняя библиотека  <a href="https://iahtoh.ru/about" target="_blank"> Кузовова Антона</a>.
+В моем детстве, дома, была большая, бумажная библиотека.
+Но мир не стоит на месте. Теперь много, что перевели в электронный вид, фильмы, музыку (даже сигареты :) ) и книги не стали исключением.
+А с учетом того, что бесплатные библиотеки все чаще блокируют на уровне провайдеров,
+то конечно же хочется иметь свою собственную (локальную) копию, доступную из любой точки по протоколу <a href="https://ru.wikipedia.org/wiki/OPDS" target="_blank"> OPDS</a>,
+который понимают многие "читалки".</br>
+<div class="title-bar-title">
+Внимание! Книги <font color="red"> не доступны</font> для свободного скачивания! Только через авторизацию (т.е. для себя любимого и моей семьи ;) ).
+</div></br></br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Сами книги как правило беру <a href="https://booktracker.org/viewtopic.php?t=46979" target="_blank">отсюда</a>. Это ежемесячно обновляемая раздача. Огромная благодарность людям, поддерживающим ее!</br></br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Реализовано все это с помощю OPDS-каталога книг. Информацию о программе Вы сможете найти на Web-сайте проекта: <a href="http://www.sopds.ru/" target="_blank"> www.sopds.ru</a>.
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(55774534, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/55774534" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 </p>
 </div>
 </div>

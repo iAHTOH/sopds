@@ -86,19 +86,29 @@ WSGI_APPLICATION = 'sopds.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-#DATABASES = {    
-#    'default': {
-#        'ENGINE': 'django.db.backends.mysql',
-#        'NAME': 'sopds',
-#        'HOST': 'localhost',
-#        'USER': 'sopds',
-#        'PASSWORD' : 'sopds',
+DATABASES = {    
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'sopds',
+        'HOST': 'localhost',
+        'USER': 'sopds',
+        'PASSWORD' : 'sopds',
+        'OPTIONS' : {
+        'init_command': """SET default_storage_engine=INNODB; \
+                       SET sql_mode='STRICT_TRANS_TABLES'; \
+                       SET NAMES UTF8 COLLATE utf8_general_ci; \
+                       SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED
+                    """
+         }
+
+
+
 #        'OPTIONS' : {
 #            'init_command': "SET default_storage_engine=MyISAM;\
 #                             SET sql_mode='';"
 #        }
-#    }             
-#}
+    }             
+}
 
 #DATABASES = {
 #    'default': {
@@ -111,12 +121,12 @@ WSGI_APPLICATION = 'sopds.wsgi.application'
 #    }
 #}
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }         
-}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }         
+#}
 
 #### SOPDS DATABASE SETTINGS FINISH ####
 

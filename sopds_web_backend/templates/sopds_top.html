@@ -1,5 +1,4 @@
 {% load i18n %}
-
 <div class="top-bar">
 
     <div class="top-bar-title">
@@ -7,8 +6,13 @@
           <button class="menu-icon" type="button" data-toggle></button>
         </span>
        <div class="title-bar-title">
-           <div class="show-for-small-only">SOPDS</div>
-           <div class="show-for-medium">SIMPLE OPDS CATALOG</div>
+           <div class="show-for-small-only">Lib.AHTOH</div>
+            <div class="show-for-medium">Домашняя библиотека Кузовова Антона содержит: 
+            <span class="label">{{ stats.allbooks }}</span> {% trans "books," %} 
+            <span class="label">{{ stats.allauthors }}</span> {% trans "authors," %} 
+            <span class="label">{{ stats.allgenres }}</span> {% trans "genres and" %} 
+            <span class="label">{{ stats.allseries }}</span> {% trans "series." %}
+           </div>
       </div>    
     </div>
     
