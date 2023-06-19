@@ -1,6 +1,8 @@
 #### SimpleOPDS Catalog
 #### Author: Dmitry V.Shelepnev
 #### Version 0.47-devel
+#### Это ффоркнутая версия. Выгладит вот так
+
 ![Скриншорт](https://github.com/iAHTOH/sopds/raw/master/Screenshot.webp)
 
 [Инструкция на русском языке: README_RUS.md](README_RUS.md)
