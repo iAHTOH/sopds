@@ -1,6 +1,7 @@
 services:
   app:
     image: mcr.microsoft.com/devcontainers/python:3.10
+    container_name: sopds
     volumes:
       - ..:/workspace
     command: sleep infinity
@@ -10,6 +11,7 @@ services:
 
   db:
     image: postgres:18
+#    container_name: pg18
     environment:
       POSTGRES_DB: sopds
       POSTGRES_USER: sopds
