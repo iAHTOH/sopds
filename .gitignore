@@ -1,9 +1,33 @@
-*.log
-*.swp
-*.pid
-*.pyc
+# ================== Books & Large files ==================
+books/
+
+# ================== Database ==================
+*.sqlite3
 db.sqlite3
 db.sqlite3-journal
-.idea/*
-venv
 
+# ================== Logs & Temp ==================
+*.log
+opds_catalog/log/
+opds_catalog/tmp/
+tmp/
+
+# ================== Python ==================
+__pycache__/
+*.pyc
+*.pyo
+
+# ================== Docker & Dev Environment ==================
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+.devcontainer/
+.vscode/
+
+# ================== Other ==================
+*.env
+*.pid
+sopds_web_backend/covers/
+opds_catalog/cache/
+.DS_Store
