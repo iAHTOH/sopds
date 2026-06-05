@@ -1,6 +1,6 @@
 {
     "name": "sopds",
-    "dockerComposeFile": "docker-compose.yml",
+    "dockerComposeFile": "../docker-compose.yml",   // ← важно: ../
     "service": "app",
     "workspaceFolder": "/workspace",
     "customizations": {
