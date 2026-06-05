@@ -1,0 +1,23 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/python:3.10
+    volumes:
+      - ..:/workspace
+    command: sleep infinity
+    working_dir: /workspace
+    ports:
+      - "8000:8000"
+
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: sopds
+      POSTGRES_USER: sopds
+      POSTGRES_PASSWORD: sopds
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
