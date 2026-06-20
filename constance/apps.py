@@ -23,7 +23,12 @@ class ConstanceConfig(AppConfig):
         constance_dbs = getattr(settings, 'CONSTANCE_DBS', None)
         if constance_dbs is not None and using not in constance_dbs:
             return
-        if ContentType._meta.installed and Permission._meta.installed:
+        try:
+            ContentType.objects.using(using).get_for_model(type('Dummy', (), {'__module__': 'django.db.models'}))
+            has_ct_table = True
+        except Exception:
+            has_ct_table = False
+        if has_ct_table:
             content_type, created = ContentType.objects.using(using).get_or_create(
                 app_label='constance',
                 model='config',
