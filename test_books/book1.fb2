@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FictionBook xmlns="http://www.gribuser.ru/xml/fictionbook/2.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <description>
+    <title-info>
+      <genre>science_fiction</genre>
+      <author>
+        <first-name>Иван</first-name>
+        <last-name>Иванов</last-name>
+      </author>
+      <book-title>Путешествие к звёздам</book-title>
+      <annotation>
+        <p>Это аннотация к тестовой книге о космических путешествиях.</p>
+      </annotation>
+      <lang>ru</lang>
+    </title-info>
+    <document-info>
+      <author>
+        <first-name>Test</first-name>
+        <last-name>Author</last-name>
+      </author>
+      <date>2024-01-15</date>
+      <id>book1-test</id>
+      <version>1.0</version>
+    </document-info>
+  </description>
+  <body>
+    <section>
+      <title>
+        <p>Глава 1. Начало</p>
+      </title>
+      <p>Это первая тестовая книга для проверки сканирования SOPDS.</p>
+      <p>Здесь мог быть ваш текст...</p>
+    </section>
+  </body>
+</FictionBook>

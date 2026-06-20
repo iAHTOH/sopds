@@ -3,6 +3,8 @@ import signal
 import sys
 import logging
 
+import pytz
+
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 
@@ -110,7 +112,7 @@ class Command(BaseCommand):
         self.SCAN_SHED_HOUR = config.SOPDS_SCAN_SHED_HOUR
         self.SCAN_SHED_MIN = config.SOPDS_SCAN_SHED_MIN
         self.stdout.write('Startup scheduled book-scan (min=%s, hour=%s, day_of_week=%s, day=%s).'%(self.SCAN_SHED_MIN,self.SCAN_SHED_HOUR,self.SCAN_SHED_DOW,self.SCAN_SHED_DAY))
-        self.sched = BlockingScheduler()
+        self.sched = BlockingScheduler(timezone=pytz.utc)
         self.sched.add_job(self.scan, 'cron', day=self.SCAN_SHED_DAY, day_of_week=self.SCAN_SHED_DOW, hour=self.SCAN_SHED_HOUR, minute=self.SCAN_SHED_MIN, id='scan')
         self.sched.add_job(self.check_settings, 'cron', minute='*/10', id='check')
         quit_command = 'CTRL-BREAK' if sys.platform == 'win32' else 'CONTROL-C'

@@ -47,15 +47,15 @@
 		<div class="large-12 column">
 			<b>{{ b.title }}</b>
 			<i style="font-size:80%;">{% trans "Download:" %} </i>
-			<i><a href="{% url 'opds_catalog:download' b.id 0 %}"><span class="label small">{{b.format}}</span></a></i>&nbsp;
+			<a href="{% url 'opds_catalog:download' b.id 0 %}" class="dl-link">{{b.format}}</a>&nbsp;
             {% if not b.format in nozip %}
-                <i><a href="{% url 'opds_catalog:download' b.id 1 %}"><span class="label small">{{b.format}}+zip</span></a></i>&nbsp;
+                <a href="{% url 'opds_catalog:download' b.id 1 %}" class="dl-link">{{b.format}}+zip</a>&nbsp;
             {%  endif %}
 			{% if b.format == 'fb2' and fb2toepub %}
-			   <i><a href="{% url 'opds_catalog:convert' b.id 'epub' %}"><span class="label small">epub</span></a></i>&nbsp;
+			   <a href="{% url 'opds_catalog:convert' b.id 'epub' %}" class="dl-link">epub</a>&nbsp;
 			{% endif %}
 			{% if b.format == 'fb2' and fb2tomobi %}
-			   <i><a href="{% url 'opds_catalog:convert' b.id 'mobi' %}"><span class="label small">mobi</span></a></i>&nbsp;
+			   <a href="{% url 'opds_catalog:convert' b.id 'mobi' %}" class="dl-link">mobi</a>&nbsp;
 			{% endif %}			
 			{% if isbookshelf %}
 			&nbsp;&nbsp;<i><a href="#" onclick="del_bsbook({{ b.id }},'{{b.title}}');"><span class="secondary label small">&nbsp;{% trans "Delete from bookshelf" %}&nbsp;</span></a></i>

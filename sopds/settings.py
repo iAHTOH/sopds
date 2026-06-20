@@ -127,6 +127,8 @@ DATABASES = {
     }
 }
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 #### SOPDS DATABASE SETTINGS FINISH ####
 
 # Password validation

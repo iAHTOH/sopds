@@ -1,0 +1,35 @@
+все проверить?<?xml version="1.0" encoding="UTF-8"?>
+<FictionBook xmlns="http://www.gribuser.ru/xml/fictionbook/2.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <description>
+    <title-info>
+      <genre>detective</genre>
+      <author>
+        <first-name>Пётр</first-name>
+        <last-name>Петров</last-name>
+      </author>
+      <book-title>Тайна старого дома</book-title>
+      <annotation>
+        <p>Детективная история, полная загадок и неожиданных поворотов.</p>
+      </annotation>
+      <lang>ru</lang>
+    </title-info>
+    <document-info>
+      <author>
+        <first-name>Test</first-name>
+        <last-name>Author</last-name>
+      </author>
+      <date>2024-03-20</date>
+      <id>book2-test</id>
+      <version>1.0</version>
+    </document-info>
+  </description>
+  <body>
+    <section>
+      <title>
+        <p>Пролог</p>
+      </title>
+      <p>Вторая тестовая книга для проверки сканера SOPDS.</p>
+      <p>Старый особняк хранил множество секретов...</p>
+    </section>
+  </body>
+</FictionBook>
