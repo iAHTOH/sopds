@@ -6,3 +6,5 @@ lxml==6.1.1
 python-telegram-bot==22.8
 django-constance[database]==4.3.5
 psycopg2-binary==2.9.12
+six==1.17.0
+pytz==2025.2

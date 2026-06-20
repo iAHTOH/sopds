@@ -51,8 +51,11 @@ class Command(BaseCommand):
         if (options["daemonize"] and (action in ["start", "scan"])):
             if sys.platform == "win32":
                 self.stdout.write("On Windows platform Daemonize not working.")
-            else:         
-                daemonize()            
+            else:
+                try:
+                    daemonize()
+                except OSError:
+                    self.stdout.write("Daemonize skipped (running inside container).")            
 
         if action=='scan':
             self.stdout.write('Startup once book-scan.')
