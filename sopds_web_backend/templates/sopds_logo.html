@@ -8,7 +8,7 @@
   {% csrf_token %}
  
     <div class="input-group">  
-		<input class="input-group-field" type="search" name="searchterms" placeholder="Search" id="main_searchbox" data-validator="check_search" required>
+		<input class="input-group-field" type="search" name="searchterms" placeholder="{% trans "Search by title" %}" id="main_searchbox" data-validator="check_search" required>
 
 		<div class="input-group-button">
 		      <button class="button" type="submit" data-close="search-dropdown" name="submit">{% trans "Search" %}</button>	   
@@ -39,9 +39,15 @@
       
    
   <script>    	
+	var searchPlaceholders = {
+			"title": "{% trans "Search by title" %}",
+			"author": "{% trans "Search by author" %}",
+			"series": "{% trans "Search by series" %}"
+	};
+
 	function SetSearch() {
 	         var searchtype = $("input[name='searchtype']:radio:checked").attr("id");
-	         $('#main_searchbox').attr( "placeholder","Search by "+ searchtype);
+	         $('#main_searchbox').attr( "placeholder", searchPlaceholders[searchtype]);
 	         if (searchtype == "title") $('#searchform').attr( "action","{% url "web:searchbooks" %}");
 	         if (searchtype == "author") $('#searchform').attr( "action","{% url "web:searchauthors" %}");
 	         if (searchtype == "series") $('#searchform').attr( "action","{% url "web:searchseries" %}");	
