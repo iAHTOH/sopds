@@ -38,8 +38,18 @@ def sopds_processor(request):
     args['sopds_version']=settings.VERSION
     args['alphabet'] = config.SOPDS_ALPHABET_MENU
     args['splititems'] = config.SOPDS_SPLITITEMS
-    args['fb2tomobi'] = (config.SOPDS_FB2TOMOBI!="")
-    args['fb2toepub'] = (config.SOPDS_FB2TOEPUB!="")
+
+    # Список доступных конвертеров для шаблонов
+    from opds_catalog.dl import CONVERT_MAP
+    args['convert_formats'] = []
+    for convert_type, config_param in CONVERT_MAP.items():
+        enabled = (getattr(config, config_param, '') != "")
+        args['fb2to%s' % convert_type] = enabled
+        args['convert_formats'].append({
+            'type': convert_type,
+            'enabled': enabled,
+        })
+
     args['nozip'] = settings.NOZIP_FORMATS
     args['cache_t']=0
 

@@ -74,5 +74,30 @@ python3 manage.py sopds_util setconf SOPDS_SERVER_LOG "/workspace/opds_catalog/l
 python3 manage.py sopds_util setconf SOPDS_SCANNER_LOG "/workspace/opds_catalog/log/sopds_scanner.log" 2>/dev/null || true
 python3 manage.py sopds_util setconf SOPDS_NOCOVER_PATH "/workspace/static/images/nocover.jpg" 2>/dev/null || true
 
+# Настройка конвертера fb2cng (современный конвертер FB2)
+FB2CNG_DIR="/workspace/convert/fb2cng"
+
+# Список: параметр_конфигурации → имя_скрипта
+for entry in \
+    "SOPDS_FB2TOEPUB:fb2epub" \
+    "SOPDS_FB2TOEPUB3:fb2epub3" \
+    "SOPDS_FB2TOKEPUB:fb2kepub" \
+    "SOPDS_FB2TOMOBI:fb2mobi" \
+    "SOPDS_FB2TOKFX:fb2kfx" \
+    "SOPDS_FB2TOPDF:fb2pdf" \
+    "SOPDS_FB2TOTXT:fb2txt" \
+    "SOPDS_FB2TOMD:fb2md"; do
+    IFS=: read -r config_name script_name <<< "$entry"
+    script_path="$FB2CNG_DIR/$script_name"
+    if [ -x "$script_path" ]; then
+        python3 manage.py sopds_util setconf "$config_name" "$script_path" 2>/dev/null || true
+        echo "Configured $config_name -> $script_path"
+    fi
+done
+
+if [ -d "/workspace/opds_catalog/tmp" ]; then
+    python3 manage.py sopds_util setconf SOPDS_TEMP_DIR "/workspace/opds_catalog/tmp" 2>/dev/null || true
+fi
+
 echo "Starting SOPDS server on port ${SOPDS_SERVER_PORT:-8000}..."
 exec python3 manage.py sopds_server start --port ${SOPDS_SERVER_PORT:-8000}

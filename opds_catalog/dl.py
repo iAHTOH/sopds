@@ -82,10 +82,31 @@ def getFileDataZip(book):
 
     return dio
 
+# Словарь соответствия: convert_type → параметр конфигурации constance
+CONVERT_MAP = {
+    'epub':  'SOPDS_FB2TOEPUB',
+    'epub3': 'SOPDS_FB2TOEPUB3',
+    'kepub': 'SOPDS_FB2TOKEPUB',
+    'mobi':  'SOPDS_FB2TOMOBI',
+    'azw8':  'SOPDS_FB2TOMOBI',
+    'kfx':   'SOPDS_FB2TOKFX',
+    'pdf':   'SOPDS_FB2TOPDF',
+    'txt':   'SOPDS_FB2TOTXT',
+    'md':    'SOPDS_FB2TOMD',
+}
+
 def getFileDataConv(book, convert_type):
 
     if book.format != 'fb2':
        return None
+
+    config_param = CONVERT_MAP.get(convert_type)
+    if not config_param:
+        return None
+
+    converter_path = getattr(config, config_param, '')
+    if not converter_path:
+        return None
 
     fo = getFileData(book)
 
@@ -96,14 +117,6 @@ def getFileDataConv(book, convert_type):
 
     (n, e) = os.path.splitext(transname)
     dlfilename = "%s.%s" % (n, convert_type)
-
-    if convert_type == 'epub':
-        converter_path = config.SOPDS_FB2TOEPUB
-    elif convert_type == 'mobi':
-        converter_path = config.SOPDS_FB2TOMOBI
-    else:
-        fo.close()
-        return None
 
     tmp_fb2_path = os.path.join(config.SOPDS_TEMP_DIR, book.filename)
     tmp_conv_path = os.path.join(config.SOPDS_TEMP_DIR, dlfilename)
@@ -362,10 +375,14 @@ def ConvertFB2(request, book_id, convert_type):
     (n,e)=os.path.splitext(transname)
     dlfilename="%s.%s"%(n,convert_type)
     
-    if convert_type=='epub':
-        converter_path=config.SOPDS_FB2TOEPUB
-    elif convert_type=='mobi':
-        converter_path=config.SOPDS_FB2TOMOBI
+    config_param = CONVERT_MAP.get(convert_type)
+    if not config_param:
+        raise Http404
+
+    converter_path = getattr(config, config_param, '')
+    if not converter_path:
+        raise Http404
+
     content_type=mime_detector.fmt(convert_type)
 
     if book.cat_type==opdsdb.CAT_NORMAL:

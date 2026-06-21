@@ -18,28 +18,25 @@ from constance import config
 class mime_detector:
     @staticmethod
     def fmt(fmt):
-        if fmt.lower() == 'xml':
-            return Mimetype.XML
-        elif fmt.lower() == 'fb2':
-            return Mimetype.FB2
-        elif fmt.lower() =='epub':
-            return Mimetype.EPUB
-        elif fmt.lower() =='mobi':
-            return Mimetype.MOBI
-        elif fmt.lower() == 'zip':
-            return Mimetype.ZIP
-        elif fmt.lower() =='pdf':
-            return Mimetype.PDF
-        elif fmt.lower() =='doc' or fmt.lower()=='docx':
-            return Mimetype.MSWORD
-        elif fmt.lower() =='djvu':
-            return Mimetype.DJVU
-        elif fmt.lower() =='txt':
-            return Mimetype.TEXT
-        elif fmt.lower() =='rtf':
-            return Mimetype.RTF
-        else:
-            return Mimetype.OCTET_STREAM
+        fmt_map = {
+            'xml': Mimetype.XML,
+            'fb2': Mimetype.FB2,
+            'epub': Mimetype.EPUB,
+            'epub3': Mimetype.EPUB3,
+            'kepub': Mimetype.KEPUB,
+            'mobi': Mimetype.MOBI,
+            'azw8': Mimetype.KFX,
+            'kfx': Mimetype.KFX,
+            'zip': Mimetype.ZIP,
+            'pdf': Mimetype.PDF,
+            'doc': Mimetype.MSWORD,
+            'docx': Mimetype.MSWORD,
+            'djvu': Mimetype.DJVU,
+            'txt': Mimetype.TEXT,
+            'md': Mimetype.MD,
+            'rtf': Mimetype.RTF,
+        }
+        return fmt_map.get(fmt.lower(), Mimetype.OCTET_STREAM)
 
     @staticmethod
     def file(filename):

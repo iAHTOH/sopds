@@ -1,0 +1,18 @@
+#!/bin/bash
+# Обёртка для конвертации FB2 → AZW8 (современный формат Kindle) через fb2cng (fbc)
+# Используется SOPDS: конвертер input.fb2 output.azw8
+# AZW8/KFX — преемник MOBI, поддерживается современными Kindle
+LANG=ru_RU.UTF-8
+LC_ALL=ru_RU.UTF-8
+export LANG
+export LC_ALL
+
+run_path=$(dirname "$0")
+converter="$run_path/fbc"
+
+if [ ! -x "$converter" ]; then
+    echo "ERROR: fb2cng converter not found at $converter" >&2
+    exit 1
+fi
+
+exec "$converter" convert --to azw8 -o "$2" "$1"

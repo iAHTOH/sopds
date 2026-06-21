@@ -255,16 +255,20 @@ class Command(BaseCommand):
             self.logger.info("Not find download links: %s" % response)
             return
 
+        from opds_catalog.dl import CONVERT_MAP
         authors = ', '.join([a['full_name'] for a in book.authors.values()])
         response = ('<b>%(title)s</b>\n%(author)s\n<b>'+_("Annotation:")+'</b>%(annotation)s\n') % {'title': book.title, 'author': authors, 'annotation':book.annotation}
 
         buttons = [InlineKeyboardButton(book.format.upper(), callback_data='/getfileorig%s'%book_id)]
         if not book.format in settings.NOZIP_FORMATS:
             buttons += [InlineKeyboardButton(book.format.upper()+'.ZIP', callback_data='/getfilezip%s'%book_id)]
-        if (config.SOPDS_FB2TOEPUB != "") and (book.format == 'fb2'):
-            buttons += [InlineKeyboardButton('EPUB', callback_data='/getfileepub%s'%book_id)]
-        if (config.SOPDS_FB2TOMOBI != "") and (book.format == 'fb2'):
-            buttons += [InlineKeyboardButton('MOBI', callback_data='/getfilemobi%s'%book_id)]
+        if book.format == 'fb2':
+            for convert_type, config_param in CONVERT_MAP.items():
+                converter_path = getattr(config, config_param, '')
+                if converter_path:
+                    label = convert_type.upper()
+                    callback = '/getfile%s%s' % (convert_type, book_id)
+                    buttons += [InlineKeyboardButton(label, callback_data=callback)]
 
         markup = InlineKeyboardMarkup([buttons])
         bot.sendMessage(chat_id=update.message.chat_id, text=response, parse_mode='HTML', reply_markup=markup)
@@ -300,20 +304,20 @@ class Command(BaseCommand):
             document = dl.getFileData(book)
             #document = config.SOPDS_SITE_ROOT + reverse("opds_catalog:download",kwargs={"book_id": book.id, "zip_flag": 0})
 
-        if re.match(r'/getfilezip',query):
+        elif re.match(r'/getfilezip',query):
             document = dl.getFileDataZip(book)
             #document = config.SOPDS_SITE_ROOT + reverse("opds_catalog:download", kwargs={"book_id": book.id, "zip_flag": 1})
             filename = filename + '.zip'
 
-        if re.match(r'/getfileepub',query):
-            document = dl.getFileDataEpub(book)
-            #document = config.SOPDS_SITE_ROOT+reverse("opds_catalog:convert",kwargs={"book_id": book.id, "convert_type": "epub"}))]
-            filename = filename + '.epub'
-
-        if re.match(r'/getfilemobi',query):
-            document = dl.getFileDataMobi(book)
-            #document = config.SOPDS_SITE_ROOT+reverse("opds_catalog:convert",kwargs={"book_id": book.id, "convert_type": "mobi"}))]
-            filename = filename + '.mobi'
+        else:
+            # Определяем формат конвертации из callback: /getfile{format}{id}
+            m = re.match(r'/getfile(.+?)(\d+)$', query)
+            if m:
+                convert_type = m.group(1)
+                document = dl.getFileDataConv(book, convert_type)
+                if document:
+                    (n, e) = os.path.splitext(filename)
+                    filename = "%s.%s" % (n, convert_type)
 
         if document:
             bot.send_document(chat_id=callback_query.message.chat_id,document=document,filename=filename)
