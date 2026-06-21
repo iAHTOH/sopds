@@ -31,3 +31,14 @@ docker-compose.yml
 sopds_web_backend/covers/
 opds_catalog/cache/
 .DS_Store
+# ================== IDE files ==================
+.project
+.pydevproject
+.settings/
+
+# ================== CI ==================
+.travis.yml
+
+# ================== Build helpers ==================
+docker-compose.build.yml
+.env.build
