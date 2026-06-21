@@ -1,0 +1,61 @@
+# Большие папки, не нужные в образе
+books/
+test_books/
+books/
+.git/
+__pycache__/
+*.pyc
+db/
+*.sqlite3
+opds_catalog/log/
+opds_catalog/tmp/
+tmp/
+.DS_Store
+Desktop.ini
+Thumbs.db
+Dockerfile
+docker-compose*.yml
+.dockerignore
+.env
+.git/
+.gitignore
+.gitattributes
+.vscode/
+.idea/
+.devcontainer/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyc
+.Python
+
+# Базы данных
+*.sqlite3
+db/
+db.sqlite3*
+
+# Логи и темпы
+*.log
+opds_catalog/log/
+opds_catalog/tmp/
+tmp/
+
+# Кэш
+opds_catalog/cache/
+
+# Система
+.DS_Store
+Desktop.ini
+Thumbs.db
+
+# Докер
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Окружение
+.env
+.env.*
+*.env
