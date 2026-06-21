@@ -31,40 +31,18 @@ services:
     image: iahtoh/sopds:latest                     # Образ с Docker Hub
     container_name: sopds                           # Имя контейнера
     environment:
-      - PUID=1002                                   # ID пользователя для прав доступа к файлам
-      - PGID=100                                    # ID группы пользователя
-      - EXT_DB=True                                 # Использовать внешнюю БД (PostgreSQL)
-      - DB_HOST=10.16.88.3                          # Хост PostgreSQL
-      - DB_PORT=5433                                # Порт PostgreSQL
-      - DB_NAME=${DB_NAME}                          # Имя БД (из .env файла)
-      - DB_USER=${DB_USER}                          # Пользователь БД (из .env файла)
-      - DB_PASS=${DB_PASS}                          # Пароль БД (из .env файла)
+      - SOPDS_ROOT_LIB=/library                     # Путь к каталогу с книгами
+      - SOPDS_LANGUAGE=ru-RU                        # Язык интерфейса
+      - SOPDS_SU_NAME=admin                         # Имя суперпользователя
+      - SOPDS_SU_PASS=admin123                      # Пароль суперпользователя
       - SOPDS_SU_EMAIL=admin@example.com            # Email суперпользователя
-      - SOPDS_SU_NAME=${SOPDS_SU_NAME}              # Имя суперпользователя (из .env)
-      - SOPDS_SU_PASS=${SOPDS_SU_PASS}              # Пароль суперпользователя (из .env)
-      - SOPDS_ROOT_LIB=/library                     # Путь к каталогу с книгами внутри контейнера
-      - SOPDS_INPX_ENABLE=False                     # Отключить INPX (используется для flibusta)
-      - SOPDS_LANGUAGE=ru-RU                        # Язык интерфейса: ru-RU или en-US
-      - SOPDS_CSRF_TRUSTED_ORIGINS=https://ebook.iahtoh.ru,http://ebook.iahtoh.ru  # Разрешённые домены для CSRF
-      - SOPDS_CONVERT_ENABLE=False                  # Включение авто-конвертации
-      - SOPDS_TMBOT_ENABLE=False                    # Включение Telegram бота
-      - CONV_LOG=/sopds/opds_catalog/log            # Путь к логам конвертации
+      - SOPDS_INPX_ENABLE=False                     # Отключить INPX
+      - SOPDS_CSRF_TRUSTED_ORIGINS=https://example.com  # Разрешённые домены
     volumes:
-      - /srv/dev-disk-by-uuid-.../e-Book:/library   # Монтируем каталог с книгами (только чтение)
-      - /docker/sopds/log:/sopds/opds_catalog/log   # Логи (пишутся наружу)
+      - /путь/к/вашим/книгам:/library:ro            # Каталог с книгами (read-only)
     ports:
-      - 8199:8000                                   # Проброс порта: хост:контейнер
-    restart: always                                 # Автоматический перезапуск
-```
-
-### .env файл (создаётся рядом с docker-compose.yml)
-
-```env
-DB_NAME=sopds
-DB_USER=sopds
-DB_PASS=ваш_пароль
-SOPDS_SU_NAME=admin
-SOPDS_SU_PASS=ваш_пароль
+      - 8080:8000                                   # Проброс порта
+    restart: always                                 # Автоперезапуск
 ```
 
 ### Запуск
