@@ -51,9 +51,9 @@ services:
 # Create .env file with passwords
 # Then run
 docker compose up -d
-# Web UI:    http://your-server:8199/web/
-# OPDS:      http://your-server:8199/opds/
-# Admin:     http://your-server:8199/admin/
+# Web UI:    http://your-server:8000/web/
+# OPDS:      http://your-server:8000/opds/
+# Admin:     http://your-server:8000/admin/
 ```
 
 ---
