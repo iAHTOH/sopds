@@ -1,61 +1,75 @@
-# Большие папки, не нужные в образе
+# ================== Большие папки ==================
 books/
 test_books/
-books/
-.git/
-__pycache__/
-*.pyc
-db/
-*.sqlite3
-opds_catalog/log/
-opds_catalog/tmp/
-tmp/
-.DS_Store
-Desktop.ini
-Thumbs.db
-Dockerfile
-docker-compose*.yml
-.dockerignore
-.env
+.venv/
+venv/
+env/
+
+# ================== Git ==================
 .git/
 .gitignore
 .gitattributes
-.vscode/
-.idea/
-.devcontainer/
 
-# Python
+# ================== Python ==================
 __pycache__/
 *.pyc
 *.pyo
-*.pyc
 .Python
 
-# Базы данных
+# ================== Базы данных ==================
 *.sqlite3
 db/
 db.sqlite3*
 
-# Логи и темпы
+# ================== Логи и темпы ==================
 *.log
 opds_catalog/log/
 opds_catalog/tmp/
 tmp/
 
-# Кэш
+# ================== Кэш ==================
 opds_catalog/cache/
 
-# Система
+# ================== IDE ==================
+.vscode/
+.idea/
+.devcontainer/
+.project
+.pydevproject
+.settings/
+
+# ================== Старые конвертеры (не используются) ==================
+convert/fb2conv/fb2conv-1.5.2.src.zip
+convert/fb2conv/kindlegen_linux_2.6_i386_v2_9.tar.gz
+convert/fb2epub/
+convert/fb2toepub/
+
+# ================== Frontend assets (только скомпилированные) ==================
+assets/
+node_modules/
+
+# ================== Система ==================
 .DS_Store
 Desktop.ini
 Thumbs.db
 
-# Докер
+# ================== Докер ==================
 Dockerfile
 docker-compose*.yml
 .dockerignore
 
-# Окружение
+# ================== Окружение ==================
 .env
 .env.*
 *.env
+.sopds_devcontainer
+
+# ================== Документация ==================
+*.md
+License
+raspberry.txt
+robots.txt
+_config.yml
+
+# ================== Статика (собирается отдельно) ==================
+static_root/
