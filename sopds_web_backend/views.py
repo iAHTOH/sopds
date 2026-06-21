@@ -1,23 +1,29 @@
+import json
+import os
+import io
 from random import randint
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.context_processors import csrf
 from django.db.models import Count, Min
 from django.utils.translation import gettext as _
 from django.contrib.auth import authenticate, login, logout, REDIRECT_FIELD_NAME
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.views.decorators.vary import vary_on_headers
 from django.urls import reverse, reverse_lazy
 from django.utils.html import strip_tags
 from django.db.models import Q
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse, JsonResponse, Http404
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 
 from opds_catalog import models
-from opds_catalog.models import Book, Author, Series, bookshelf, Counter, Catalog, Genre, lang_menu
+from opds_catalog.models import Book, Author, Series, bookshelf, Counter, Catalog, Genre, lang_menu, Bookmark
 from opds_catalog import settings
 from constance import config
 from opds_catalog.opds_paginator import Paginator as OPDS_Paginator
 
+from opds_catalog.dl import getFileDataConv, getFileData, getFileName
 
 from sopds_web_backend.settings import HALF_PAGES_LINKS
 
@@ -608,4 +614,86 @@ def LogoutView(request):
 def handler403(request,args):
     response = render(request, 'sopds_login.html', args)
     response.status_code = 403
+    return response
+
+
+@vary_on_headers("HTTP_ACCEPT_LANGUAGE")
+@sopds_login(url='web:login')
+def ReaderView(request, book_id):
+    """Страница онлайн-читалки с epub.js"""
+    book = get_object_or_404(Book, id=book_id)
+    
+    if config.SOPDS_AUTH and request.user.is_authenticated:
+        bookshelf.objects.get_or_create(user=request.user, book=book)
+    
+    # Загружаем прогресс чтения
+    bookmark = None
+    if request.user.is_authenticated:
+        bookmark = Bookmark.objects.filter(user=request.user, book=book).first()
+    
+    authors = ', '.join([a.full_name for a in book.authors.all()])
+    
+    args = {
+        'book': book,
+        'authors': authors,
+        'bookmark_cfi': bookmark.cfi if bookmark else '',
+        'bookmark_pct': bookmark.percentage if bookmark else 0,
+        'breadcrumbs': [book.title],
+    }
+    return render(request, 'sopds_reader.html', args)
+
+
+@login_required
+@require_POST
+def BookmarkSaveView(request, book_id):
+    """Сохранение закладки/прогресса"""
+    book = get_object_or_404(Book, id=book_id)
+    data = json.loads(request.body)
+    
+    bookmark, created = Bookmark.objects.update_or_create(
+        user=request.user,
+        book=book,
+        defaults={
+            'cfi': data.get('cfi', ''),
+            'percentage': float(data.get('percentage', 0)),
+        }
+    )
+    return JsonResponse({'status': 'ok', 'percentage': bookmark.percentage})
+
+
+@login_required
+def BookmarkGetView(request, book_id):
+    """Получение закладки"""
+    book = get_object_or_404(Book, id=book_id)
+    bookmark = Bookmark.objects.filter(user=request.user, book=book).first()
+    if bookmark:
+        return JsonResponse({
+            'cfi': bookmark.cfi,
+            'percentage': bookmark.percentage,
+        })
+    return JsonResponse({'cfi': '', 'percentage': 0})
+
+
+@vary_on_headers("HTTP_ACCEPT_LANGUAGE")
+@sopds_login(url='web:login')
+def ServeEpubView(request, book_id):
+    """Отдача EPUB книги для читалки (конвертация на лету)"""
+    book = get_object_or_404(Book, id=book_id)
+    
+    if book.format != 'fb2':
+        raise Http404("Only FB2 books can be converted to EPUB")
+    
+    document = getFileDataConv(book, 'epub')
+    if not document:
+        raise Http404("Conversion failed")
+    
+    filename = getFileName(book)
+    (n, e) = os.path.splitext(filename)
+    dlfilename = "%s.%s" % (n, 'epub')
+    
+    response = HttpResponse(document.read(), content_type='application/epub+zip')
+    response['Content-Disposition'] = 'inline; filename="%s"' % dlfilename
+    response['Access-Control-Allow-Origin'] = '*'
+    response['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+    response['Access-Control-Allow-Headers'] = 'Range, Content-Type'
     return response

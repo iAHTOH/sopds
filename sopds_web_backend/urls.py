@@ -17,6 +17,10 @@ urlpatterns = [
     re_path(r'^logout/$',views.LogoutView, name='logout'),
     re_path(r'^bs/delete/$',views.BSDelView, name='bsdel'),
     re_path(r'^bs/clear/$', views.BSClearView, name='bsclear'),
+    re_path(r'^read/(?P<book_id>[0-9]+)/$', views.ReaderView, name='reader'),
+    re_path(r'^read/(?P<book_id>[0-9]+)/epub/$', views.ServeEpubView, name='serve_epub'),
+    re_path(r'^bookmark/(?P<book_id>[0-9]+)/save/$', views.BookmarkSaveView, name='bookmark_save'),
+    re_path(r'^bookmark/(?P<book_id>[0-9]+)/get/$', views.BookmarkGetView, name='bookmark_get'),
     re_path(r'^$',views.hello, name='main'),
 ]
 

@@ -46,6 +46,9 @@
 {%  for b in books %}
 		<div class="large-12 column">
 			<b>{{ b.title }}</b>
+			{% if b.format == 'fb2' %}
+			    <a href="{% url 'web:reader' b.id %}" class="dl-link" style="font-weight:bold;">📖 {% trans "Read online" %}</a>
+			{% endif %}
             <br>
 			<i style="font-size:80%;">{% trans "Download:" %} </i>
 			<a href="{% url 'opds_catalog:download' b.id 0 %}" class="dl-link">{{b.format}}</a>&nbsp;

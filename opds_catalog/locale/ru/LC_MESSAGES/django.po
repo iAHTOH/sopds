@@ -364,3 +364,7 @@ msgstr "Все книги автора %(full_name)s"
 
 #~ msgid "All books by %(last_name)s %(first_name)s"
 #~ msgstr "Все книги автора %(last_name)s %(first_name)s"
+
+#: .\sopds_web_backend\templates\sopds_books.html
+msgid "Read online"
+msgstr "Читать онлайн"
