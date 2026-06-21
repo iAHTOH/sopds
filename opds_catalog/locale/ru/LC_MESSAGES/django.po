@@ -368,3 +368,19 @@ msgstr "Все книги автора %(full_name)s"
 #: .\sopds_web_backend\templates\sopds_books.html
 msgid "Read online"
 msgstr "Читать онлайн"
+
+#: .\sopds_web_backend\templates\sopds_books.html
+msgid "Read"
+msgstr "Читать"
+
+#: .\sopds_web_backend\templates\sopds_fb2reader.html
+msgid "Prev"
+msgstr "Назад"
+
+#: .\sopds_web_backend\templates\sopds_fb2reader.html
+msgid "Next"
+msgstr "Далее"
+
+#: .\sopds_web_backend\templates\sopds_fb2reader.html
+msgid "Page"
+msgstr "Стр."

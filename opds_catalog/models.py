@@ -139,19 +139,4 @@ class Counter(models.Model):
     objects = CounterManager()
 
 
-class Bookmark(models.Model):
-    """Закладка/прогресс чтения книги пользователем"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_lazy("User"))
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name=_lazy("Book"))
-    cfi = models.CharField(max_length=512, blank=True, default='', verbose_name=_lazy("CFI position"))
-    percentage = models.FloatField(default=0.0, verbose_name=_lazy("Reading progress (%)"))
-    updated = models.DateTimeField(auto_now=True, verbose_name=_lazy("Last read"))
-
-    class Meta:
-        verbose_name = _lazy("Bookmark")
-        verbose_name_plural = _lazy("Bookmarks")
-        unique_together = ('user', 'book')
-
-    def __str__(self):
-        return f"{self.user} - {self.book} ({self.percentage:.0f}%)"
 

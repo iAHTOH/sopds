@@ -18,7 +18,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 
 from opds_catalog import models
-from opds_catalog.models import Book, Author, Series, bookshelf, Counter, Catalog, Genre, lang_menu, Bookmark
+from opds_catalog.models import Book, Author, Series, bookshelf, Counter, Catalog, Genre, lang_menu
 from opds_catalog import settings
 from constance import config
 from opds_catalog.opds_paginator import Paginator as OPDS_Paginator
@@ -617,122 +617,107 @@ def handler403(request,args):
     return response
 
 
+CHARS_PER_PAGE = 5000
+
+
+def fb2_to_html(fb2_data):
+    """FB2 to HTML paginated"""
+    import xml.etree.ElementTree as ET
+    try:
+        root = ET.fromstring(fb2_data)
+    except ET.ParseError:
+        return ['<p>Error parsing book</p>']
+    NS = 'http://www.gribuser.ru/xml/fictionbook/2.0'
+    def tag(el):
+        return el.tag.split('}')[-1] if '}' in el.tag else el.tag
+    def esc(text):
+        if text is None: return ''
+        return text.replace('&', '&').replace('<', '<').replace('>', '>')
+    def inline(el):
+        parts = []
+        if el.text: parts.append(esc(el.text))
+        for child in el:
+            ct = tag(child)
+            if ct == 'strong': parts.append('<strong>%s</strong>' % esc(child.text))
+            elif ct == 'emphasis': parts.append('<em>%s</em>' % esc(child.text))
+            elif ct == 'a':
+                href = child.get('href', '') or child.get('{http://www.w3.org/1999/xlink}href', '')
+                parts.append('<a href="%s">%s</a>' % (esc(href), esc(child.text)))
+            else: parts.append(esc(child.text))
+            if child.tail: parts.append(esc(child.tail))
+        return ''.join(parts)
+    title_el = root.find('{%s}description/{%s}title-info/{%s}book-title' % (NS, NS, NS))
+    title = title_el.text if title_el is not None else 'Unknown'
+    body = root.find('{%s}body' % NS)
+    if body is None: return ['<p>Empty book</p>']
+    html_parts, cur_page, cur_len = [], [], 0
+    def add(html):
+        nonlocal cur_page, cur_len
+        if cur_len + len(html) > CHARS_PER_PAGE and cur_page:
+            html_parts.append('\n'.join(cur_page))
+            cur_page, cur_len = [], 0
+        cur_page.append(html)
+        cur_len += len(html)
+    add('<h1>%s</h1>' % esc(title))
+    def walk(el):
+        t = tag(el)
+        if t == 'body':
+            for child in el: walk(child)
+        elif t == 'section':
+            for child in el: walk(child)
+        elif t == 'title':
+            texts = [inline(c) for c in el if tag(c) == 'p']
+            text = ' '.join(filter(None, texts)).strip()
+            if text: add('<h2>%s</h2>' % text)
+        elif t == 'p':
+            text = inline(el).strip()
+            add('<p>%s</p>' % text if text else '<br>')
+        elif t == 'subtitle':
+            text = inline(el).strip()
+            if text: add('<p class="subtitle">%s</p>' % text)
+        elif t == 'empty-line': add('<br>')
+        elif t == 'poem':
+            lines = []
+            for stanza in el:
+                if tag(stanza) == 'stanza':
+                    for v in stanza:
+                        if tag(v) == 'v': lines.append(esc(v.text) + '<br>')
+                    lines.append('<br>')
+            if lines: add('<div class="poem">%s</div>' % ''.join(lines))
+        elif t in ('epigraph', 'cite'):
+            for child in el: walk(child)
+    walk(body)
+    if cur_page: html_parts.append('\n'.join(cur_page))
+    return html_parts if html_parts else ['<p>Empty book</p>']
+
+
 @vary_on_headers("HTTP_ACCEPT_LANGUAGE")
 @sopds_login(url='web:login')
-def ReaderView(request, book_id):
-    """Страница онлайн-читалки с epub.js"""
+def Fb2ReaderView(request, book_id, page=1):
+    """FB2 paginated reader"""
+    from opds_catalog.dl import getFileData
     book = get_object_or_404(Book, id=book_id)
-    
+    if book.format != 'fb2': raise Http404("Only FB2 books can be read online")
     if config.SOPDS_AUTH and request.user.is_authenticated:
         bookshelf.objects.get_or_create(user=request.user, book=book)
-    
-    # Загружаем прогресс чтения
-    bookmark = None
-    if request.user.is_authenticated:
-        bookmark = Bookmark.objects.filter(user=request.user, book=book).first()
-    
-    authors = ', '.join([a.full_name for a in book.authors.all()])
-    
+    try: page = int(page)
+    except: page = 1
+    fo = getFileData(book)
+    if not fo: raise Http404("Book file not found")
+    fb2_data = fo.read()
+    fo.close()
+    pages = fb2_to_html(fb2_data)
+    total_pages = len(pages)
+    if page < 1: page = 1
+    if page > total_pages: page = total_pages
+    content = pages[page - 1] if pages else '<p>Empty book</p>'
+    font_size = request.GET.get('font', 100)
+    try: font_size = int(font_size)
+    except: font_size = 100
+    font_size = max(60, min(200, font_size))
     args = {
-        'book': book,
-        'authors': authors,
-        'bookmark_cfi': bookmark.cfi if bookmark else '',
-        'bookmark_pct': bookmark.percentage if bookmark else 0,
-        'breadcrumbs': [book.title],
+        'book': book, 'content': content, 'page': page, 'total_pages': total_pages,
+        'page_prev': max(1, page-1), 'page_next': min(total_pages, page+1),
+        'font_size': font_size, 'breadcrumbs': [book.title],
     }
-    return render(request, 'sopds_reader.html', args)
-
-
-@login_required
-@require_POST
-def BookmarkSaveView(request, book_id):
-    """Сохранение закладки/прогресса"""
-    book = get_object_or_404(Book, id=book_id)
-    data = json.loads(request.body)
-    
-    bookmark, created = Bookmark.objects.update_or_create(
-        user=request.user,
-        book=book,
-        defaults={
-            'cfi': data.get('cfi', ''),
-            'percentage': float(data.get('percentage', 0)),
-        }
-    )
-    return JsonResponse({'status': 'ok', 'percentage': bookmark.percentage})
-
-
-@login_required
-def BookmarkGetView(request, book_id):
-    """Получение закладки"""
-    book = get_object_or_404(Book, id=book_id)
-    bookmark = Bookmark.objects.filter(user=request.user, book=book).first()
-    if bookmark:
-        return JsonResponse({
-            'cfi': bookmark.cfi,
-            'percentage': bookmark.percentage,
-        })
-    return JsonResponse({'cfi': '', 'percentage': 0})
-
-
-@vary_on_headers("HTTP_ACCEPT_LANGUAGE")
-@sopds_login(url='web:login')
-def ServeEpubView(request, book_id):
-    """Отдача EPUB книги для читалки (конвертация на лету)"""
-    book = get_object_or_404(Book, id=book_id)
-    
-    if book.format != 'fb2':
-        raise Http404("Only FB2 books can be converted to EPUB")
-    
-    document = getFileDataConv(book, 'epub')
-    if not document:
-        raise Http404("Conversion failed")
-    
-    filename = getFileName(book)
-    (n, e) = os.path.splitext(filename)
-    dlfilename = "%s.%s" % (n, 'epub')
-    
-    data = document.read()
-    content_length = len(data)
-    content_type = 'application/epub+zip'
-    
-    # Поддержка Range-запросов (необходимо для epub.js)
-    range_header = request.META.get('HTTP_RANGE', '').strip()
-    if range_header.startswith('bytes='):
-        try:
-            range_str = range_header[6:]  # убираем 'bytes='
-            if '-' in range_str:
-                start_str, end_str = range_str.split('-', 1)
-                start = int(start_str) if start_str else 0
-                end = int(end_str) if end_str else content_length - 1
-                if end >= content_length:
-                    end = content_length - 1
-                
-                if start > end or start < 0:
-                    raise ValueError()
-                
-                chunk = data[start:end+1]
-                response = HttpResponse(chunk, status=206, content_type=content_type)
-                response['Content-Range'] = 'bytes %d-%d/%d' % (start, end, content_length)
-                response['Content-Length'] = str(len(chunk))
-            else:
-                # Только start
-                start = int(range_str)
-                if start >= content_length:
-                    response = HttpResponse(status=416)
-                else:
-                    chunk = data[start:]
-                    response = HttpResponse(chunk, status=206, content_type=content_type)
-                    response['Content-Range'] = 'bytes %d-%d/%d' % (start, content_length-1, content_length)
-                    response['Content-Length'] = str(len(chunk))
-        except (ValueError, IndexError):
-            response = HttpResponse(status=400)
-    else:
-        response = HttpResponse(data, content_type=content_type)
-        response['Content-Length'] = str(content_length)
-    
-    response['Content-Disposition'] = 'inline; filename="%s"' % dlfilename
-    response['Accept-Ranges'] = 'bytes'
-    response['Access-Control-Allow-Origin'] = '*'
-    response['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
-    response['Access-Control-Allow-Headers'] = 'Range, Content-Type'
-    return response
+    return render(request, 'sopds_fb2reader.html', args)

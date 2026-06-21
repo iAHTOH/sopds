@@ -15,173 +15,372 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%"
 "100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: .\sopds\settings.py:171
+#: .\opds_catalog\feeds.py:132
+#, python-format
+msgid "All books by %(author)s"
+msgstr "Все книги автора %(author)s"
+
+#: .\opds_catalog\feeds.py:144
+msgid "Book doublicates"
+msgstr "Дубликаты книги"
+
+#: .\opds_catalog\feeds.py:165 .\opds_catalog\feeds.py:250
+#: .\opds_catalog\feeds.py:252 .\opds_catalog\tests\test_feeds.py:24
+msgid "By catalogs"
+msgstr "По каталогам"
+
+#: .\opds_catalog\feeds.py:166 .\opds_catalog\tests\test_feeds.py:25
+#, python-format
+msgid "Catalogs: %(catalogs)s, books: %(books)s."
+msgstr "Каталогов: %(catalogs)s, книг: %(books)s."
+
+#: .\opds_catalog\feeds.py:167
+msgid "By authors"
+msgstr "По авторам"
+
+#: .\opds_catalog\feeds.py:168 .\opds_catalog\tests\test_feeds.py:26
+#, python-format
+msgid "Authors: %(authors)s."
+msgstr "Авторов: %(authors)s."
+
+#: .\opds_catalog\feeds.py:169
+msgid "By titles"
+msgstr "По наименованиям"
+
+#: .\opds_catalog\feeds.py:170
+#, python-format
+msgid "Books: %(books)s."
+msgstr "Книг: %(books)s."
+
+#: .\opds_catalog\feeds.py:171
+msgid "By genres"
+msgstr "По жанрам"
+
+#: .\opds_catalog\feeds.py:172 .\opds_catalog\tests\test_feeds.py:27
+#, python-format
+msgid "Genres: %(genres)s."
+msgstr "Жанров: %(genres)s."
+
+#: .\opds_catalog\feeds.py:173
+msgid "By series"
+msgstr "По сериям"
+
+#: .\opds_catalog\feeds.py:174
+#, python-format
+msgid "Series: %(series)s."
+msgstr "Серий: %(series)s."
+
+#: .\opds_catalog\feeds.py:178
+#, python-format
+msgid "%(username)s Book shelf"
+msgstr "Книжная полка (%(username)s)"
+
+#: .\opds_catalog\feeds.py:179
+#, python-format
+msgid "%(username)s books readed: %(bookshelf)s."
+msgstr "Книг прочитано (%(username)s): %(bookshelf)s."
+
+#: .\opds_catalog\feeds.py:319 .\opds_catalog\feeds.py:572
+#, python-format
+msgid "<b>Authors: </b>%(authors)s<br/>"
+msgstr "<b>Авторов: </b>%(authors)s<br/>"
+
+#: .\opds_catalog\feeds.py:320 .\opds_catalog\feeds.py:573
+#, python-format
+msgid "<b>Genres: </b>%(genres)s<br/>"
+msgstr "<b>Жанров: </b>%(genres)s<br/>"
+
+#: .\opds_catalog\feeds.py:321 .\opds_catalog\feeds.py:574
+#, python-format
+msgid "<b>Series: </b>%(series)s<br/>"
+msgstr "<b>Серий: </b>%(series)s<br/>"
+
+#: .\opds_catalog\feeds.py:322 .\opds_catalog\feeds.py:575
+#, fuzzy, python-format
+#| msgid "<b>No in Series: </b>%(ser_no)s<br/>"
+msgid "<b>No in Series: </b>%(ser_no)s<br/>"
+msgstr "<b>No в серии: </b>%(series)s<br/>"
+
+#: .\opds_catalog\feeds.py:323 .\opds_catalog\feeds.py:576
+#, python-format
+msgid ""
+"<b>File: </b>%(filename)s<br/><b>File size: </b>%(filesize)s<br/><b>Changes "
+"date: </b>%(docdate)s<br/>"
+msgstr ""
+"<b>Файл: </b>%(filename)s<br/><b>Размер файла: </b>%(filesize)s<br/><b>Дата "
+"изменения: </b>%(docdate)s<br/>"
+
+#: .\opds_catalog\feeds.py:357 .\opds_catalog\tests\test_feeds.py:60
+msgid "Search by titles"
+msgstr "Поиск по наименованиям"
+
+#: .\opds_catalog\feeds.py:357
+msgid "Search books by title"
+msgstr "Поиск книг по наименованию"
+
+#: .\opds_catalog\feeds.py:358
+msgid "Search by authors"
+msgstr "Поиск авторов"
+
+#: .\opds_catalog\feeds.py:358
+msgid "Search authors by name"
+msgstr "Поиск авторов по имени"
+
+#: .\opds_catalog\feeds.py:359
+msgid "Search series"
+msgstr "Поиск серий"
+
+#: .\opds_catalog\feeds.py:391
+msgid "Books found"
+msgstr "Найдены книги"
+
+#: .\opds_catalog\feeds.py:391
+msgid "doubles hide"
+msgstr "дубликаты скрыты"
+
+#: .\opds_catalog\feeds.py:391
+msgid "doubles show"
+msgstr "дубликаты показаны"
+
+#: .\opds_catalog\feeds.py:577
+#, python-format
+msgid "<b>Doubles count: </b>%(doubles)s<br/>"
+msgstr "<b>Число дубликатов: </b>%(doubles)s<br/>"
+
+#: .\opds_catalog\feeds.py:592
+msgid "Series by authors select"
+msgstr "Выбор серий у автора"
+
+#: .\opds_catalog\feeds.py:613
+msgid "Books by series"
+msgstr "Книги по сериям"
+
+#: .\opds_catalog\feeds.py:613
+msgid "Books by author and series"
+msgstr "Книги по авторам и сериям"
+
+#: .\opds_catalog\feeds.py:614
+msgid "Books outside series"
+msgstr "Книги вне серий"
+
+#: .\opds_catalog\feeds.py:614
+msgid "Books by author outside series"
+msgstr "Книги автора вне серий"
+
+#: .\opds_catalog\feeds.py:615
+msgid "Books by alphabet"
+msgstr "Книги по алфавиту"
+
+#: .\opds_catalog\feeds.py:615
+msgid "Books by author alphabetical order"
+msgstr "Книги автора в алфавитном порядке"
+
+#: .\opds_catalog\feeds.py:646
+msgid "Authors found"
+msgstr "Найдены авторы"
+
+#: .\opds_catalog\feeds.py:699 .\opds_catalog\feeds.py:777
+#, python-format
+msgid "Books count: %s"
+msgstr "Всего: %s книг"
+
+#: .\opds_catalog\feeds.py:715
+msgid "Series found"
+msgstr "Найдены серии"
+
+#: .\opds_catalog\feeds.py:801
 msgid "Select language"
-msgstr "Выбор языка"
+msgstr "Выбор алфавита"
 
-#: .\sopds\settings.py:172
-msgid "Absolute path to books collection directory"
-msgstr "Абсолютный путь к каталогу с файлами книг"
+#: .\opds_catalog\feeds.py:813 .\opds_catalog\tests\test_feeds.py:106
+#: .\opds_catalog\tests\test_feeds.py:119
+#: .\opds_catalog\tests\test_feeds.py:130
+msgid "Cyrillic"
+msgstr "Кириллица (РУС)"
 
-#: .\sopds\settings.py:173
-msgid "List of managed book files extensions"
-msgstr "Список расширений файлов, для включения в коллекцию книг"
+#: .\opds_catalog\feeds.py:814 .\opds_catalog\tests\test_feeds.py:107
+msgid "Latin"
+msgstr "Латинница (LAT)"
 
-#: .\sopds\settings.py:174
-msgid "Turn once scanning directly"
-msgstr "Запустить внеочередное однократное сканирование коллекции книг"
+#: .\opds_catalog\feeds.py:815 .\opds_catalog\tests\test_feeds.py:108
+msgid "Digits"
+msgstr "Цифры (0..9)"
 
-#: .\sopds\settings.py:175
-msgid "Pages cache time"
-msgstr "Время хранения страницы в кэше"
+#: .\opds_catalog\feeds.py:816 .\opds_catalog\tests\test_feeds.py:109
+msgid "Other symbols"
+msgstr "Другие символы"
 
-#: .\sopds\settings.py:177
-msgid "Telegramm API Token"
-msgstr "Telegramm API Token"
+#: .\opds_catalog\feeds.py:817 .\opds_catalog\tests\test_feeds.py:110
+msgid "Show all"
+msgstr "Показать все"
 
-#: .\sopds\settings.py:178
+#: .\opds_catalog\feeds.py:847
+msgid "Select books by substring"
+msgstr "Поиск книг по подстроке"
+
+#: .\opds_catalog\feeds.py:884 .\opds_catalog\feeds.py:1050
+#, python-format
+msgid "Found: %s books"
+msgstr "Найдено %s книг"
+
+#: .\opds_catalog\feeds.py:905
+msgid "Select authors by substring"
+msgstr "Поиск авторов по подстроке"
+
+#: .\opds_catalog\feeds.py:942
+#, python-format
+msgid "Found: %s authors"
+msgstr "Найдено %s авторов"
+
+#: .\opds_catalog\feeds.py:963
+msgid "Select series by substring"
+msgstr "Поиск серий по подстроке"
+
+#: .\opds_catalog\feeds.py:1000
+#, python-format
+msgid "Found: %s series"
+msgstr "Найдено %s серий"
+
+#: .\opds_catalog\feeds.py:1021
+#, python-format
+msgid "Select genres (%s)"
+msgstr "Выбор жанра (%s)"
+
+#: .\opds_catalog\feeds.py:1021
+msgid "section"
+msgstr "секция"
+
+#: .\opds_catalog\feeds.py:1021
+msgid "subsection"
+msgstr "подсекция"
+
+#: .\opds_catalog\management\commands\sopds_telebot.py:45
+#, python-format
 msgid ""
-"Enable telebot authentication. Test presense telegram username in local "
-"users database (case insensetive)."
+"Hello %s!\n"
+"Unfortunately you do not have access to information. Please contact the bot "
+"administrator."
 msgstr ""
-"Включить аутентификацию для телебота. Проверяется наличие имени пользователя "
-"Telegram в локальной БД Simple OPDS (case insensetive)"
+"Здравствуйте %s!\n"
+"К сожалению у Вас отсутствует доступ к информации. Обратитесь к "
+"администратору бота."
 
-#: .\sopds\settings.py:179 .\sopds\settings.py:186
-msgid "Max items on page"
-msgstr "Максимальное число элементов на странице"
+#: .\opds_catalog\management\commands\sopds_telebot.py:46
+#, python-format
+msgid "Denied access for user: %s"
+msgstr "Отказ в доступе для пользователя: %s"
 
-#: .\sopds\settings.py:181
-msgid "Enable authentication"
-msgstr "Включить аутентификацию"
-
-#: .\sopds\settings.py:182
-msgid "Enable alphabet submenu"
-msgstr "Включить субменю выбора алфавита"
-
-#: .\sopds\settings.py:183
-msgid "This flag hides found doublicates"
-msgstr "Флаг прячет найденные дубликаты книг"
-
-#: .\sopds\settings.py:184
-msgid "This flag activate showing cover of books"
-msgstr "Флаг активирует показ обложек книг"
-
-#: .\sopds\settings.py:185
-msgid "Max subitems count in alphabet menuitem"
-msgstr "Максимальное число подэлементов в элементах алфавитных меню"
-
-#: .\sopds\settings.py:187
-msgid "Create downloaded filename from book title"
-msgstr "Имя загружаемого файла формировать из названия книги"
-
-#: .\sopds\settings.py:188
-msgid "Path to image file showing for book without embedded cover"
-msgstr "Путь к изображению, для показа в качестве обложки для книг без обложек"
-
-#: .\sopds\settings.py:191
-msgid "This flag activate SAX Parser for FB2 instead of lxml.xpath"
-msgstr ""
-"Флаг активирует стандартный FB2sax парсер (быстрее, парсит даже невалидные "
-"fb2). При отключенной опции будет использован FB2xpath парсер (немного "
-"медленне, требователен к валидности fb2, появился в версии 0.42)"
-
-#: .\sopds\settings.py:192
-msgid "This flag activate zip files scanning"
-msgstr "Флаг разрешает сканированеи содержимого ZIP файлов"
-
-#: .\sopds\settings.py:193
-msgid "Set codepage for filenames inside zipfile"
-msgstr "Codepage для имен файлов внутри ZIP"
-
-#: .\sopds\settings.py:194
+#: .\opds_catalog\management\commands\sopds_telebot.py:65
+#, python-format
 msgid ""
-"Enables read metadata from inpx-file (and stop scanning deeper from ipx-file "
-"place)"
+"%(subtitle)s\n"
+"Hello %(username)s! To search for a book, enter part of her title or author:"
 msgstr ""
-"Считываем метаданные книг з INPX-файлов (при этом не сканируем файлы и "
-"каталоги, расположенные на уровне или ниже найденого INPX)"
+"%(subtitle)s\n"
+"Здравствуйте %(username)s! Для поиска книги, введите часть ее наименования "
+"или автора:"
 
-#: .\sopds\settings.py:195
-msgid "Skip scanning INPX with unchanged size after previous scan"
+#: .\opds_catalog\management\commands\sopds_telebot.py:168
+#, python-format
+msgid "(doubles:%s) "
+msgstr "(дубликатов:%s) "
+
+#: .\opds_catalog\management\commands\sopds_telebot.py:187
+msgid "Too short for search, please try again."
+msgstr "Слишком короткая строка для поиска, попробуйте еще раз."
+
+#: .\opds_catalog\management\commands\sopds_telebot.py:189
+#, python-format
+msgid "I'm searching for the book: %s"
+msgstr "Выполняю поиск книги: %s"
+
+#: .\opds_catalog\management\commands\sopds_telebot.py:201
+msgid "No results were found for your query, please try again."
+msgstr "По Вашему запросу ничего не найдено, попробуйте еще раз."
+
+#: .\opds_catalog\management\commands\sopds_telebot.py:206
+#, python-format
+msgid ""
+"Found %s books.\n"
+"I create list, after a few seconds, select the file to download:"
 msgstr ""
-"Не сканируем INPX, если его размер не изменился с предидущего сканирования"
+"Найдено %s книг(и). \n"
+"Формирую список, через несколько секунд выберите нужную для скачивания:"
 
-#: .\sopds\settings.py:196
-msgid "Test avialability zip files listed in INPX before add in collection"
+#: .\opds_catalog\management\commands\sopds_telebot.py:244
+#: .\opds_catalog\management\commands\sopds_telebot.py:281
+msgid ""
+"The book on the link you specified is not found, try to repeat the book "
+"search first."
 msgstr ""
-"Проверяем наличие zip файлов, перечисленных в INPX перед добавлением их "
-"содержимого в коллекцию"
+"Книга по указанной Вами ссылке не найдена, попробуйте повторить поиск книги "
+"сначала."
 
-#: .\sopds\settings.py:197
-msgid "Test avialability book files listed in INPX before add in collection"
-msgstr ""
-"Тестируем наличие книг, перечисленных в INPX перед добавлением их "
-"содержимого в коллекцию"
+#: .\opds_catalog\management\commands\sopds_telebot.py:250
+msgid "Annotation:"
+msgstr "Аннотация:"
 
-#: .\sopds\settings.py:198
-msgid "Logical deleting unavialable files"
-msgstr "Логическое удаление отсутствующих файлов"
+#: .\opds_catalog\management\commands\sopds_telebot.py:313
+msgid "There was a technical error, please contact the Bot administrator."
+msgstr "Возникла техническая ошибка, обратитесь к администратору Бота."
 
-#: .\sopds\settings.py:200
-msgid "sheduled minutes for sopds_scanner (cron syntax)"
-msgstr "минуты для планировщика sopds_Scanner (как в cron)"
+#: .\opds_catalog\sopdscan.py:233
+msgid "Unknown author"
+msgstr "Неизвестный автор"
 
-#: .\sopds\settings.py:201
-msgid "sheduled hours for sopds_scanner (cron syntax)"
-msgstr "часы для планировщика sopds_Scanner (как в cron)"
+#: .\opds_catalog\tests\test_feeds.py:78
+#, python-format
+msgid "All books by %(full_name)s"
+msgstr "Все книги автора %(full_name)s"
 
-#: .\sopds\settings.py:202
-msgid "sheduled day for sopds_scanner (cron syntax)"
-msgstr "дни для планировщика sopds_Scanner (как в cron)"
+#~ msgid "Book name:"
+#~ msgstr "Название:"
 
-#: .\sopds\settings.py:203
-msgid "sheduled day of weeks for sopds_scanner (cron syntax)"
-msgstr "дни недели для планировщика sopds_Scanner (как в cron)"
+#~ msgid "Authors:"
+#~ msgstr "Авторы:"
 
-#: .\sopds\settings.py:205
-msgid "Path to FB2-EPUB converter program"
-msgstr "Путь к конвертеру FB2-EPUB"
+#~ msgid "Genres:"
+#~ msgstr "Жанры:"
 
-#: .\sopds\settings.py:206
-msgid "Path to FB2-MOBI converter program"
-msgstr "Путь к конвертеру FB2-MOBI"
+#~ msgid "Series:"
+#~ msgstr "Серии:"
 
-#: .\sopds\settings.py:207
-msgid "Path to temporary files directory"
-msgstr "Путь к временному каталогу"
+#~ msgid "File:"
+#~ msgstr "Файл:"
 
-#: .\sopds\settings.py:209
-msgid "Path to logfile for sopds_server process"
-msgstr "Путь к логфайлу для процесса sopds_server"
+#~ msgid "File size:"
+#~ msgstr "Размер файла:"
 
-#: .\sopds\settings.py:210
-msgid "Path to logfile for sopds_scanner process"
-msgstr "Путь к логфайлу для процесса sopds_scanner"
+#~ msgid "Changes date:"
+#~ msgstr "Дата правки:"
 
-#: .\sopds\settings.py:211
-#, fuzzy
-#| msgid "Path to logfile for sopds_server process"
-msgid "Path to logfile for sopds_telebot process"
-msgstr "Путь к логфайлу для процесса sopds_server"
+#~ msgid "Doubles count:"
+#~ msgstr "Число дубликатов:"
 
-#: .\sopds\settings.py:212
-msgid "Path to pidfile for sopds_server process"
-msgstr "Путь к pid-файлу для процесса sopds_server"
+#~ msgid "All books by %(last_name)s %(first_name)s"
+#~ msgstr "Все книги автора %(last_name)s %(first_name)s"
 
-#: .\sopds\settings.py:213
-msgid "Path to pidfile for sopds_scanner process"
-msgstr "Путь к pid-файлу для процесса sopds_scanner"
+#: .\sopds_web_backend\templates\sopds_books.html
+msgid "Read online"
+msgstr "Читать онлайн"
 
-#: .\sopds\settings.py:214
-#, fuzzy
-#| msgid "Path to pidfile for sopds_server process"
-msgid "Path to pidfile for sopds_telebot process"
-msgstr "Путь к pid-файлу для процесса sopds_server"
+#: .\sopds_web_backend\templates\sopds_books.html
+msgid "Read"
+msgstr "Читать"
 
-#~ msgid "This flag activate extraction metadata from fb2 files"
-#~ msgstr "Флаг активирует извлеченеи метаданных из fb2-файлов"
+#: .\sopds_web_backend\templates\sopds_fb2reader.html
+msgid "Prev"
+msgstr "Назад"
+
+#: .\sopds_web_backend\templates\sopds_fb2reader.html
+msgid "Next"
+msgstr "Далее"
+
+#: .\sopds_web_backend\templates\sopds_fb2reader.html
+msgid "Page"
+msgstr "Стр."
