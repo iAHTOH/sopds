@@ -2,6 +2,8 @@
 
 **Version 0.47-devel** | [Инструкция на русском](README_RUS.md)
 
+![Screenshot](Screenshot.webp)
+
 OPDS catalog for home e-book collection with web interface, Telegram bot, and online reader.
 
 ---
