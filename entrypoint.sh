@@ -40,10 +40,14 @@ with open(settings_path, 'w') as f:
     f.write(content)
 EOF
 
-# Миграции
+# Миграции (создание таблиц, если их нет)
 echo "Running migrations..."
 python3 manage.py migrate --noinput
 
+# Инициализация справочника жанров (только при первом запуске)
+python3 manage.py sopds_util clear 2>/dev/null || true
+
+# Создание суперпользователя
 if [ -n "$SOPDS_SU_NAME" ] && [ -n "$SOPDS_SU_EMAIL" ] && [ -n "$SOPDS_SU_PASS" ]; then
     echo "Creating superuser..."
     python3 manage.py createsuperuser --noinput --username "$SOPDS_SU_NAME" --email "$SOPDS_SU_EMAIL" 2>/dev/null || true
