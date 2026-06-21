@@ -691,8 +691,47 @@ def ServeEpubView(request, book_id):
     (n, e) = os.path.splitext(filename)
     dlfilename = "%s.%s" % (n, 'epub')
     
-    response = HttpResponse(document.read(), content_type='application/epub+zip')
+    data = document.read()
+    content_length = len(data)
+    content_type = 'application/epub+zip'
+    
+    # Поддержка Range-запросов (необходимо для epub.js)
+    range_header = request.META.get('HTTP_RANGE', '').strip()
+    if range_header.startswith('bytes='):
+        try:
+            range_str = range_header[6:]  # убираем 'bytes='
+            if '-' in range_str:
+                start_str, end_str = range_str.split('-', 1)
+                start = int(start_str) if start_str else 0
+                end = int(end_str) if end_str else content_length - 1
+                if end >= content_length:
+                    end = content_length - 1
+                
+                if start > end or start < 0:
+                    raise ValueError()
+                
+                chunk = data[start:end+1]
+                response = HttpResponse(chunk, status=206, content_type=content_type)
+                response['Content-Range'] = 'bytes %d-%d/%d' % (start, end, content_length)
+                response['Content-Length'] = str(len(chunk))
+            else:
+                # Только start
+                start = int(range_str)
+                if start >= content_length:
+                    response = HttpResponse(status=416)
+                else:
+                    chunk = data[start:]
+                    response = HttpResponse(chunk, status=206, content_type=content_type)
+                    response['Content-Range'] = 'bytes %d-%d/%d' % (start, content_length-1, content_length)
+                    response['Content-Length'] = str(len(chunk))
+        except (ValueError, IndexError):
+            response = HttpResponse(status=400)
+    else:
+        response = HttpResponse(data, content_type=content_type)
+        response['Content-Length'] = str(content_length)
+    
     response['Content-Disposition'] = 'inline; filename="%s"' % dlfilename
+    response['Accept-Ranges'] = 'bytes'
     response['Access-Control-Allow-Origin'] = '*'
     response['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
     response['Access-Control-Allow-Headers'] = 'Range, Content-Type'
