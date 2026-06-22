@@ -20,7 +20,7 @@ from constance import config
 from PIL import Image
 
 def getFileName(book):
-    if config.SOPDS_TITLE_AS_FILENAME:
+    if config.EOPDS_TITLE_AS_FILENAME:
         transname = utils.translit(book.title + '.' + book.format)
     else:
         transname = utils.translit(book.filename)
@@ -29,7 +29,7 @@ def getFileName(book):
 
 
 def getFileData(book):
-    full_path = os.path.join(config.SOPDS_ROOT_LIB, book.path)
+    full_path = os.path.join(config.EOPDS_ROOT_LIB, book.path)
     if book.cat_type==opdsdb.CAT_INP:
         # Убираем из пути INPX и INP файл
         inp_path, zip_name = os.path.split(full_path)
@@ -84,15 +84,15 @@ def getFileDataZip(book):
 
 # Словарь соответствия: convert_type → параметр конфигурации constance
 CONVERT_MAP = {
-    'epub':  'SOPDS_FB2TOEPUB',
-    'epub3': 'SOPDS_FB2TOEPUB3',
-    'kepub': 'SOPDS_FB2TOKEPUB',
-    'mobi':  'SOPDS_FB2TOMOBI',
-    'azw8':  'SOPDS_FB2TOMOBI',
-    'kfx':   'SOPDS_FB2TOKFX',
-    'pdf':   'SOPDS_FB2TOPDF',
-    'txt':   'SOPDS_FB2TOTXT',
-    'md':    'SOPDS_FB2TOMD',
+    'epub':  'EOPDS_FB2TOEPUB',
+    'epub3': 'EOPDS_FB2TOEPUB3',
+    'kepub': 'EOPDS_FB2TOKEPUB',
+    'mobi':  'EOPDS_FB2TOMOBI',
+    'azw8':  'EOPDS_FB2TOMOBI',
+    'kfx':   'EOPDS_FB2TOKFX',
+    'pdf':   'EOPDS_FB2TOPDF',
+    'txt':   'EOPDS_FB2TOTXT',
+    'md':    'EOPDS_FB2TOMD',
 }
 
 def getFileDataConv(book, convert_type):
@@ -118,8 +118,8 @@ def getFileDataConv(book, convert_type):
     (n, e) = os.path.splitext(transname)
     dlfilename = "%s.%s" % (n, convert_type)
 
-    tmp_fb2_path = os.path.join(config.SOPDS_TEMP_DIR, book.filename)
-    tmp_conv_path = os.path.join(config.SOPDS_TEMP_DIR, dlfilename)
+    tmp_fb2_path = os.path.join(config.EOPDS_TEMP_DIR, book.filename)
+    tmp_conv_path = os.path.join(config.EOPDS_TEMP_DIR, dlfilename)
     fw = open(tmp_fb2_path,'wb')
     fw.write(fo.read())
     fw.close()
@@ -156,10 +156,10 @@ def Download(request, book_id, zip_flag):
     """ Загрузка файла книги """
     book = Book.objects.get(id=book_id)
 
-    if config.SOPDS_AUTH and request.user.is_authenticated:
+    if config.EOPDS_AUTH and request.user.is_authenticated:
         bookshelf.objects.get_or_create(user=request.user, book=book)
 
-    full_path=os.path.join(config.SOPDS_ROOT_LIB,book.path)
+    full_path=os.path.join(config.EOPDS_ROOT_LIB,book.path)
     
     if book.cat_type==opdsdb.CAT_INP:
         # Убираем из пути INPX и INP файл
@@ -168,7 +168,7 @@ def Download(request, book_id, zip_flag):
         path, inpx_name = os.path.split(inpx_path)
         full_path = os.path.join(path,zip_name)
         
-    if config.SOPDS_TITLE_AS_FILENAME:
+    if config.EOPDS_TITLE_AS_FILENAME:
         transname=utils.translit(book.title+'.'+book.format)
     else:
         transname=utils.translit(book.filename)
@@ -228,12 +228,12 @@ def Download(request, book_id, zip_flag):
     return response
 
 # Новая версия (0.42) процедуры извлечения обложек из файлов книг fb2, epub, mobi
-@cache_page(config.SOPDS_CACHE_TIME)
+@cache_page(config.EOPDS_CACHE_TIME)
 def Cover(request, book_id, thumbnail=False):
     """ Загрузка обложки """
     book = Book.objects.get(id=book_id)
     response = HttpResponse()
-    full_path = os.path.join(config.SOPDS_ROOT_LIB, book.path)
+    full_path = os.path.join(config.EOPDS_ROOT_LIB, book.path)
     if book.cat_type == opdsdb.CAT_INP:
         # Убираем из пути INPX и INP файл
         inp_path, zip_name = os.path.split(full_path)
@@ -274,9 +274,9 @@ def Cover(request, book_id, thumbnail=False):
         response.write(image)
 
     if not image:
-        if os.path.exists(config.SOPDS_NOCOVER_PATH):
+        if os.path.exists(config.EOPDS_NOCOVER_PATH):
             response["Content-Type"] = 'image/jpeg'
-            f = open(config.SOPDS_NOCOVER_PATH, "rb")
+            f = open(config.EOPDS_NOCOVER_PATH, "rb")
             response.write(f.read())
             f.close()
         else:
@@ -290,7 +290,7 @@ def Cover0(request, book_id, thumbnail = False):
     book = Book.objects.get(id=book_id)
     response = HttpResponse()
     c0=0
-    full_path=os.path.join(config.SOPDS_ROOT_LIB,book.path)
+    full_path=os.path.join(config.EOPDS_ROOT_LIB,book.path)
     if book.cat_type==opdsdb.CAT_INP:
         # Убираем из пути INPX и INP файл
         inp_path, zip_name = os.path.split(full_path)
@@ -333,9 +333,9 @@ def Cover0(request, book_id, thumbnail = False):
                 c0=0
 
     if c0==0:
-        if os.path.exists(config.SOPDS_NOCOVER_PATH):
+        if os.path.exists(config.EOPDS_NOCOVER_PATH):
             response["Content-Type"]='image/jpeg'
-            f=open(config.SOPDS_NOCOVER_PATH,"rb")
+            f=open(config.EOPDS_NOCOVER_PATH,"rb")
             response.write(f.read())
             f.close()
         else:
@@ -354,10 +354,10 @@ def ConvertFB2(request, book_id, convert_type):
     if book.format!='fb2':
         raise Http404
 
-    if config.SOPDS_AUTH and request.user.is_authenticated:
+    if config.EOPDS_AUTH and request.user.is_authenticated:
         bookshelf.objects.get_or_create(user=request.user, book=book)
 
-    full_path=os.path.join(config.SOPDS_ROOT_LIB,book.path)
+    full_path=os.path.join(config.EOPDS_ROOT_LIB,book.path)
     if book.cat_type==opdsdb.CAT_INP:
         # Убираем из пути INPX и INP файл
         inp_path, zip_name = os.path.split(full_path)
@@ -365,7 +365,7 @@ def ConvertFB2(request, book_id, convert_type):
         path, inpx_name = os.path.split(inpx_path)
         full_path = os.path.join(path,zip_name)
             
-    if config.SOPDS_TITLE_AS_FILENAME:
+    if config.EOPDS_TITLE_AS_FILENAME:
         transname=utils.translit(book.title+'.'+book.format)
     else:
         transname=utils.translit(book.filename)      
@@ -394,11 +394,11 @@ def ConvertFB2(request, book_id, convert_type):
         except FileNotFoundError:
             raise Http404        
         z = zipfile.ZipFile(fz, 'r', allowZip64=True)
-        z.extract(book.filename,config.SOPDS_TEMP_DIR)
-        tmp_fb2_path=os.path.join(config.SOPDS_TEMP_DIR,book.filename)
+        z.extract(book.filename,config.EOPDS_TEMP_DIR)
+        tmp_fb2_path=os.path.join(config.EOPDS_TEMP_DIR,book.filename)
         file_path=tmp_fb2_path        
         
-    tmp_conv_path=os.path.join(config.SOPDS_TEMP_DIR,dlfilename)
+    tmp_conv_path=os.path.join(config.EOPDS_TEMP_DIR,dlfilename)
     popen_args = ("\"%s\" \"%s\" \"%s\""%(converter_path,file_path,tmp_conv_path))
     proc = subprocess.Popen(popen_args, shell=True, stdout=subprocess.PIPE)
     #proc = subprocess.Popen((converter_path.encode('utf8'),file_path.encode('utf8'),tmp_conv_path.encode('utf8')), shell=True, stdout=subprocess.PIPE)

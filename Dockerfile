@@ -10,13 +10,13 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     DB_NAME="" \
     DB_USER="" \
     DB_PASS="" \
-    SOPDS_SU_NAME="" \
-    SOPDS_SU_EMAIL="" \
-    SOPDS_SU_PASS="" \
-    SOPDS_ROOT_LIB="/library" \
-    SOPDS_INPX_ENABLE=True \
-    SOPDS_LANGUAGE="ru-RU" \
-    SOPDS_SERVER_PORT="8000"
+    EOPDS_SU_NAME="" \
+    EOPDS_SU_EMAIL="" \
+    EOPDS_SU_PASS="" \
+    EOPDS_ROOT_LIB="/library" \
+    EOPDS_INPX_ENABLE=True \
+    EOPDS_LANGUAGE="ru-RU" \
+    EOPDS_SERVER_PORT="8000"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git curl xz-utils unzip locales gettext \
@@ -38,20 +38,18 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Компиляция переводов
-RUN mkdir -p /workspace/sopds/locale/ru/LC_MESSAGES \
-    && cp /workspace/opds_catalog/locale/ru/LC_MESSAGES/django.po /workspace/sopds/locale/ru/LC_MESSAGES/ \
-    && msgfmt /workspace/sopds/locale/ru/LC_MESSAGES/django.po -o /workspace/sopds/locale/ru/LC_MESSAGES/django.mo
+RUN mkdir -p /workspace/eopds/locale/ru/LC_MESSAGES \
+    && cp /workspace/opds_catalog/locale/ru/LC_MESSAGES/django.po /workspace/eopds/locale/ru/LC_MESSAGES/ \
+    && msgfmt /workspace/eopds/locale/ru/LC_MESSAGES/django.po -o /workspace/eopds/locale/ru/LC_MESSAGES/django.mo
 
-# Скачиваем и устанавливаем fb2cng — современный конвертер FB2 в EPUB/AZW8
-# (после COPY . ., чтобы скрипты-обёртки из проекта перезаписали архивы)
-RUN FB2CNG_VERSION="v1.5.3" \
-    && curl -sL "https://github.com/rupor-github/fb2cng/releases/download/${FB2CNG_VERSION}/fbc-linux-amd64.zip" -o /tmp/fbc.zip \
-    && mkdir -p /workspace/convert/fb2cng \
-    && unzip -o /tmp/fbc.zip -d /workspace/convert/fb2cng/ \
-    && chmod +x /workspace/convert/fb2cng/fbc \
-    && chmod +x /workspace/convert/fb2cng/fb2epub /workspace/convert/fb2cng/fb2mobi \
-    && rm -f /tmp/fbc.zip
-
+# Установка fb2cng — современный конвертер FB2 в EPUB/AZW8 (бинарник из локальной папки)
+RUN if [ -f /workspace/convert/fb2cng/fbc ]; then \
+        chmod +x /workspace/convert/fb2cng/fbc; \
+        chmod +x /workspace/convert/fb2cng/fb2epub /workspace/convert/fb2cng/fb2mobi; \
+        echo "fb2cng installed from local copy"; \
+    else \
+        echo "fb2cng binary not found in convert/fb2cng/"; \
+    fi
 RUN mkdir -p db opds_catalog/log opds_catalog/tmp static \
     && chmod -R 777 db opds_catalog
 

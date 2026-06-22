@@ -1,6 +1,6 @@
 import os
 from io import StringIO
-from opds_catalog.management.commands import sopds_util
+from opds_catalog.management.commands import eopds_util
 from constance import config
 
 from django.core.management import call_command
@@ -24,10 +24,10 @@ class constanceTestCase(TestCase):
 
     def test_constance_set_get_attr(self):
         conf_value = 'test_temp_dir'
-        call_command('constance', 'set', 'SOPDS_TEMP_DIR', conf_value)
-        self.assertEquals(config.SOPDS_TEMP_DIR, conf_value)
+        call_command('constance', 'set', 'EOPDS_TEMP_DIR', conf_value)
+        self.assertEquals(config.EOPDS_TEMP_DIR, conf_value)
         out = StringIO()
-        call_command('constance', 'get', 'SOPDS_TEMP_DIR', stdout=out)
+        call_command('constance', 'get', 'eopds_TEMP_DIR', stdout=out)
         out.seek(0)
         self.assertEquals(out.getvalue().strip(), conf_value)
         out.close()

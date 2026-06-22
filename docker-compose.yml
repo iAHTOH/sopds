@@ -1,31 +1,51 @@
-# Simple OPDS Домашняя библиотека https://github.com/iAHTOH/docker-sopds
+# EOPDS — Электронная OPDS Домашняя библиотека
 services:
-  sopds:
+  db:
+    image: postgres:15-alpine
+    container_name: eopds-db
+    environment:
+      POSTGRES_DB: eopds
+      POSTGRES_USER: eopds
+      POSTGRES_PASSWORD: eopds123
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eopds -d eopds"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  eopds:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: sopds
-    # environment:
-    #   - PUID=1002
-    #   - PGID=100
-    #   - EXT_DB=True
-    #   - DB_HOST=10.16.88.3
-    #   - DB_PORT=5433
-    #   - DB_NAME=${DB_NAME}
-    #   - DB_USER=${DB_USER}
-    #   - DB_PASS=${DB_PASS}
-    #   - SOPDS_SU_EMAIL=k.ahtoh@gmail.com
-    #   - SOPDS_SU_NAME=${SOPDS_SU_NAME}
-    #   - SOPDS_SU_PASS=${SOPDS_SU_PASS}
-    #   - SOPDS_ROOT_LIB=/library
-    #   - SOPDS_INPX_ENABLE=True
-    #   - SOPDS_LANGUAGE=ru-RU
-    #   - SOPDS_TMBOT_ENABLE=False
-    #   - CONV_LOG=/sopds/opds_catalog/log
+    container_name: eopds
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - EXT_DB=True
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=eopds
+      - DB_USER=eopds
+      - DB_PASS=eopds123
+      - EOPDS_SU_NAME=admin
+      - EOPDS_SU_EMAIL=admin@eopds.local
+      - EOPDS_SU_PASS=admin123
+      - EOPDS_ROOT_LIB=/library
+      - EOPDS_INPX_ENABLE=True
+      - EOPDS_LANGUAGE=ru-RU
+      - EOPDS_SERVER_PORT=8000
     volumes:
       - .:/workspace
       - /run/media/ahtoh/SSD2/e-book:/library:ro
-      # - /docker/sopds/log:/sopds/opds_catalog/log
     ports:
       - 8000:8000
-    # restart: always
+    restart: unless-stopped
+
+volumes:
+  pgdata:

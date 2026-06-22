@@ -28,7 +28,7 @@ docker-compose.yml
 # ================== Other ==================
 *.env
 *.pid
-sopds_web_backend/covers/
+eopds_web_backend/covers/
 opds_catalog/cache/
 .DS_Store
 # ================== IDE files ==================

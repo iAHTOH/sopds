@@ -62,7 +62,7 @@ docker-compose*.yml
 .env
 .env.*
 *.env
-.sopds_devcontainer
+.eopds_devcontainer
 
 # ================== Документация ==================
 *.md

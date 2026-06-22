@@ -82,7 +82,7 @@ def create_bookfile(file, original_filename):
     if mimetype == Mimetype.EPUB:
         return EPub(file, original_filename)
     elif mimetype == Mimetype.FB2:
-        return FB2sax(file, original_filename) if config.SOPDS_FB2SAX else FB2(file, original_filename)
+        return FB2sax(file, original_filename) if config.EOPDS_FB2SAX else FB2(file, original_filename)
     elif mimetype == Mimetype.FB2_ZIP:
         return FB2Zip(file, original_filename)
     elif mimetype == Mimetype.MOBI:

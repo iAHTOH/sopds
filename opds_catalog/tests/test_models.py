@@ -26,7 +26,7 @@ class modelsTestCase(TestCase):
         bauthor.objects.create(book=book, author=author)
         bgenre.objects.create(book=book, genre=genre)
         bseries.objects.create(book=book, ser=series, ser_no=1)
-        user = User.objects.create_user("testuser","testuser@sopds.ru", "testpassword", first_name="Test", last_name="User")
+        user = User.objects.create_user("testuser","testuser@eopds.ru", "testpassword", first_name="Test", last_name="User")
         bookshelf.objects.create(user=user, book=book, readtime=self.testdatetime)
         Counter.objects.update_known_counters()
 

@@ -42,8 +42,8 @@ class Inpx:
         self.inpx_itemseparator = ':'
         self.append_callback = append_callback
         self.inpskip_callback = inpskip_callback
-        self.TEST_ZIP = config.SOPDS_INPX_TEST_ZIP
-        self.TEST_FILES = config.SOPDS_INPX_TEST_FILES
+        self.TEST_ZIP = config.EOPDS_INPX_TEST_ZIP
+        self.TEST_FILES = config.EOPDS_INPX_TEST_FILES
         self.error = 0       
         
     def parse(self):

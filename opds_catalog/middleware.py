@@ -19,7 +19,7 @@ class BasicAuthMiddleware(object):
         return response
 
     def process_request(self,request):
-        if not config.SOPDS_AUTH:
+        if not config.EOPDS_AUTH:
             return
             
         # AuthenticationMiddleware is required so that request.user exists.
@@ -50,10 +50,10 @@ class BasicAuthMiddleware(object):
         return self.unauthed()
 
 
-class SOPDSLocaleMiddleware(MiddlewareMixin):
+class eopdsLocaleMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
-            request.LANG = config.SOPDS_LANGUAGE
+            request.LANG = config.EOPDS_LANGUAGE
             translation.activate(request.LANG)
             request.LANGUAGE_CODE = request.LANG
 

@@ -13,7 +13,7 @@ class feedsTestCase(TestCase):
     fixtures = ['testdb.json']
     
     def setUp(self):
-        config.SOPDS_AUTH=False           
+        config.EOPDS_AUTH=False           
   
     def test_MainFeed(self):
         c = Client()
@@ -49,7 +49,7 @@ class feedsTestCase(TestCase):
         c = Client()
         response = c.get('/opds/search/')
         self.assertEquals(response.status_code, 200)
-        self.assertIn('www.sopds.ru', response.content.decode())
+        self.assertIn('www.eopds.ru', response.content.decode())
         
     def test_SearchTypes(self):
         c = Client()
@@ -113,7 +113,7 @@ class feedsTestCase(TestCase):
         c = Client()
         response = c.get('/opds/books/0/')
         self.assertEquals(response.status_code, 200)
-        if config.SOPDS_ALPHABET_MENU:
+        if config.EOPDS_ALPHABET_MENU:
             response = c.get(reverse('opds:lang_books'));
             self.assertEquals(response.status_code, 200)
             self.assertIn(_("Cyrillic"), response.content.decode()) 
@@ -124,7 +124,7 @@ class feedsTestCase(TestCase):
         c = Client()
         response = c.get('/opds/authors/0/')
         self.assertEquals(response.status_code, 200)
-        if config.SOPDS_ALPHABET_MENU:        
+        if config.EOPDS_ALPHABET_MENU:        
             response = c.get(reverse('opds:lang_authors'));
             self.assertEquals(response.status_code, 200)
             self.assertIn(_("Cyrillic"), response.content.decode())  

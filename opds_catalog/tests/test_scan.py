@@ -3,7 +3,7 @@ import os
 from django.test import TestCase
 
 from opds_catalog import opdsdb
-from opds_catalog.sopdscan import opdsScanner
+from opds_catalog.eopdscan import opdsScanner
 #from opds_catalog import settings
 from opds_catalog.models import Book, Catalog, Author, Genre, Series
 
@@ -18,7 +18,7 @@ class scanTestCase(TestCase):
     test_zip = "books.zip"
 
     def setUp(self):
-        config.SOPDS_ROOT_LIB = self.test_ROOTLIB
+        config.EOPDS_ROOT_LIB = self.test_ROOTLIB
 
     def test_processfile_fb2(self):
         """ Тестирование процедуры processfile (извлекает метаданные из книги FB2 и помещает в БД) """
@@ -52,11 +52,11 @@ class scanTestCase(TestCase):
         self.assertEqual(book.genres.get(genre="antique").subsection, "antique")
 
     def test_processfile_fb2sax(self):
-        config.SOPDS_FB2SAX = True
+        config.EOPDS_FB2SAX = True
         self.test_processfile_fb2()
 
     def test_processfile_fb2xpath(self):
-        config.SOPDS_FB2SAX = False
+        config.EOPDS_FB2SAX = False
         self.test_processfile_fb2()
 
     def test_processfile_epub(self):

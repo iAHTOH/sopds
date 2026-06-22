@@ -27,19 +27,19 @@ OPDS catalog for home e-book collection with web interface, Telegram bot, and on
 ### docker-compose.yml
 
 ```yaml
-# Simple OPDS Home Library https://github.com/iAHTOH/docker-sopds
+# Simple OPDS Home Library https://github.com/iAHTOH/docker-eopds
 services:
-  sopds:
-    image: iahtoh/sopds:latest                     # Docker Hub image
-    container_name: sopds                           # Container name
+  eopds:
+    image: iahtoh/eopds:latest                     # Docker Hub image
+    container_name: eopds                           # Container name
     environment:
-      - SOPDS_ROOT_LIB=/library                     # Path to books directory
-      - SOPDS_LANGUAGE=en-US                        # Interface language
-      - SOPDS_SU_NAME=admin                         # Superuser name
-      - SOPDS_SU_PASS=admin123                      # Superuser password
-      - SOPDS_SU_EMAIL=admin@example.com            # Superuser email
-      - SOPDS_INPX_ENABLE=False                     # Disable INPX
-      - SOPDS_CSRF_TRUSTED_ORIGINS=https://example.com  # Allowed CSRF domains
+      - eopds_ROOT_LIB=/library                     # Path to books directory
+      - eopds_LANGUAGE=en-US                        # Interface language
+      - eopds_SU_NAME=admin                         # Superuser name
+      - eopds_SU_PASS=admin123                      # Superuser password
+      - eopds_SU_EMAIL=admin@example.com            # Superuser email
+      - eopds_INPX_ENABLE=False                     # Disable INPX
+      - eopds_CSRF_TRUSTED_ORIGINS=https://example.com  # Allowed CSRF domains
     volumes:
       - /path/to/your/books:/library:ro             # Books directory (read-only)
     ports:
@@ -65,15 +65,15 @@ docker compose up -d
 ### 1. Simple installation (SQLite)
 
 ```bash
-git clone https://github.com/iAHTOH/sopds.git
-cd sopds
+git clone https://github.com/iAHTOH/eopds.git
+cd eopds
 pip install -r requirements.txt
 python3 manage.py migrate
-python3 manage.py sopds_util clear
+python3 manage.py eopds_util clear
 python3 manage.py createsuperuser
-python3 manage.py sopds_util setconf SOPDS_ROOT_LIB '/path/to/books'
-python3 manage.py sopds_scanner start --daemon
-python3 manage.py sopds_server start --daemon
+python3 manage.py eopds_util setconf eopds_ROOT_LIB '/path/to/books'
+python3 manage.py eopds_scanner start --daemon
+python3 manage.py eopds_server start --daemon
 ```
 
 ### 2. Database setup
@@ -84,15 +84,15 @@ Used automatically — no additional configuration needed.
 
 #### PostgreSQL (recommended)
 
-In `sopds/settings.py` uncomment PostgreSQL block and comment out SQLite:
+In `eopds/settings.py` uncomment PostgreSQL block and comment out SQLite:
 
 ```python
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'sopds',
-        'USER': 'sopds',
-        'PASSWORD': 'sopds',
+        'NAME': 'eopds',
+        'USER': 'eopds',
+        'PASSWORD': 'eopds',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -102,8 +102,8 @@ DATABASES = {
 Create database and user:
 
 ```sql
-CREATE ROLE sopds WITH PASSWORD 'sopds' LOGIN;
-CREATE DATABASE sopds WITH OWNER sopds;
+CREATE ROLE eopds WITH PASSWORD 'eopds' LOGIN;
+CREATE DATABASE eopds WITH OWNER eopds;
 ```
 
 #### MySQL / MariaDB
@@ -112,10 +112,10 @@ CREATE DATABASE sopds WITH OWNER sopds;
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sopds',
+        'NAME': 'eopds',
         'HOST': 'localhost',
-        'USER': 'sopds',
-        'PASSWORD': 'sopds',
+        'USER': 'eopds',
+        'PASSWORD': 'eopds',
         'OPTIONS': {
             'init_command': "SET default_storage_engine=MyISAM; SET sql_mode='';"
         }
@@ -145,12 +145,12 @@ Database is configured via environment variables (see docker-compose.yml example
 Configure paths (if not using Docker):
 
 ```bash
-python3 manage.py sopds_util setconf SOPDS_FB2TOEPUB "/path/to/fb2conv/fb2epub"
-python3 manage.py sopds_util setconf SOPDS_FB2TOEPUB3 "/path/to/fb2conv/fb2epub3"
-python3 manage.py sopds_util setconf SOPDS_FB2TOMOBI "/path/to/fb2conv/fb2mobi"
-python3 manage.py sopds_util setconf SOPDS_FB2TOPDF "/path/to/fb2conv/fb2pdf"
-python3 manage.py sopds_util setconf SOPDS_FB2TOTXT "/path/to/fb2conv/fb2txt"
-python3 manage.py sopds_util setconf SOPDS_TEMP_DIR "/path/to/tmp"
+python3 manage.py eopds_util setconf eopds_FB2TOEPUB "/path/to/fb2conv/fb2epub"
+python3 manage.py eopds_util setconf eopds_FB2TOEPUB3 "/path/to/fb2conv/fb2epub3"
+python3 manage.py eopds_util setconf eopds_FB2TOMOBI "/path/to/fb2conv/fb2mobi"
+python3 manage.py eopds_util setconf eopds_FB2TOPDF "/path/to/fb2conv/fb2pdf"
+python3 manage.py eopds_util setconf eopds_FB2TOTXT "/path/to/fb2conv/fb2txt"
+python3 manage.py eopds_util setconf eopds_TEMP_DIR "/path/to/tmp"
 ```
 
 ### 3. Online reader
@@ -165,8 +165,8 @@ Click **📖 Read** next to the book title (FB2 only).
 ### 4. Telegram bot
 
 ```bash
-python3 manage.py sopds_util setconf SOPDS_TELEBOT_API_TOKEN "<token>"
-python3 manage.py sopds_telebot start --daemon
+python3 manage.py eopds_util setconf eopds_TELEBOT_API_TOKEN "<token>"
+python3 manage.py eopds_telebot start --daemon
 ```
 
 ---
@@ -175,20 +175,20 @@ python3 manage.py sopds_telebot start --daemon
 
 ```bash
 # Collection info
-python3 manage.py sopds_util info
+python3 manage.py eopds_util info
 
 # Clear database
-python3 manage.py sopds_util clear
+python3 manage.py eopds_util clear
 
 # Scan books
-python3 manage.py sopds_scanner scan
+python3 manage.py eopds_scanner scan
 
 # Configuration
-python3 manage.py sopds_util getconf
-python3 manage.py sopds_util setconf SOPDS_ROOT_LIB '/path/to/books'
+python3 manage.py eopds_util getconf
+python3 manage.py eopds_util setconf eopds_ROOT_LIB '/path/to/books'
 
 # Start server
-python3 manage.py sopds_server start --port 8000
+python3 manage.py eopds_server start --port 8000
 ```
 
 ---
@@ -199,21 +199,21 @@ Available via web admin `/admin/` → Constance → Settings.
 
 | Parameter | Default | Description |
 |---|---|---|
-| **SOPDS_LANGUAGE** | en-US | Interface language |
-| **SOPDS_ROOT_LIB** | books/ | Path to book collection |
-| **SOPDS_AUTH** | True | BASIC authentication |
-| **SOPDS_FB2TOEPUB** | — | FB2→EPUB converter path |
-| **SOPDS_FB2TOEPUB3** | — | FB2→EPUB3 converter path |
-| **SOPDS_FB2TOKEPUB** | — | FB2→KEPUB converter path |
-| **SOPDS_FB2TOMOBI** | — | FB2→MOBI/AZW8 converter path |
-| **SOPDS_FB2TOKFX** | — | FB2→KFX converter path |
-| **SOPDS_FB2TOPDF** | — | FB2→PDF converter path |
-| **SOPDS_FB2TOTXT** | — | FB2→TXT converter path |
-| **SOPDS_FB2TOMD** | — | FB2→Markdown converter path |
-| **SOPDS_TEMP_DIR** | tmp/ | Temporary directory for conversion |
-| **SOPDS_CACHE_TIME** | 1200 | Page cache time (sec) |
-| **SOPDS_SPLITITEMS** | 300 | Items per group before expanding |
-| **SOPDS_MAXITEMS** | 60 | Books per page |
+| **eopds_LANGUAGE** | en-US | Interface language |
+| **eopds_ROOT_LIB** | books/ | Path to book collection |
+| **eopds_AUTH** | True | BASIC authentication |
+| **eopds_FB2TOEPUB** | — | FB2→EPUB converter path |
+| **eopds_FB2TOEPUB3** | — | FB2→EPUB3 converter path |
+| **eopds_FB2TOKEPUB** | — | FB2→KEPUB converter path |
+| **eopds_FB2TOMOBI** | — | FB2→MOBI/AZW8 converter path |
+| **eopds_FB2TOKFX** | — | FB2→KFX converter path |
+| **eopds_FB2TOPDF** | — | FB2→PDF converter path |
+| **eopds_FB2TOTXT** | — | FB2→TXT converter path |
+| **eopds_FB2TOMD** | — | FB2→Markdown converter path |
+| **eopds_TEMP_DIR** | tmp/ | Temporary directory for conversion |
+| **eopds_CACHE_TIME** | 1200 | Page cache time (sec) |
+| **eopds_SPLITITEMS** | 300 | Items per group before expanding |
+| **eopds_MAXITEMS** | 60 | Books per page |
 
 ---
 
