@@ -1,4 +1,4 @@
-# Simple OPDS Home Library
+# Easy OPDS Home Library
 
 **Version 0.47-devel** | [Инструкция на русском](README_RUS.md)
 
@@ -27,7 +27,7 @@ OPDS catalog for home e-book collection with web interface, Telegram bot, and on
 ### docker-compose.yml
 
 ```yaml
-# Simple OPDS Home Library https://github.com/iAHTOH/docker-eopds
+# Easy OPDS Home Library https://github.com/iAHTOH/docker-eopds
 services:
   eopds:
     image: iahtoh/eopds:latest                     # Docker Hub image

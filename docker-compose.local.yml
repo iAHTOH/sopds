@@ -1,0 +1,73 @@
+# EOPDS — Локальная сборка с nginx (для разработки)
+services:
+  # Основной сайт проекта (eopds.ru)
+  site:
+    image: nginx:alpine
+    container_name: eopds-site
+    volumes:
+      - ./eopds_site:/usr/share/nginx/html:ro
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+  # Демо-каталог (demo.eopds.ru)
+  demo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eopds-demo
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - EXT_DB=True
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=eopds_demo
+      - DB_USER=eopds
+      - DB_PASS=eopds123
+      - EOPDS_SU_NAME=admin
+      - EOPDS_SU_EMAIL=admin@eopds.local
+      - EOPDS_SU_PASS=admin123
+      - EOPDS_ROOT_LIB=/library
+      - EOPDS_INPX_ENABLE=True
+      - EOPDS_LANGUAGE=ru-RU
+      - EOPDS_SERVER_PORT=8000
+    volumes:
+      - .:/workspace
+      - /run/media/ahtoh/SSD2/e-book:/library:ro
+    restart: unless-stopped
+    ports:
+      - "8081:8000"
+
+  nginx-ui:
+    image: uozi/nginx-ui:latest
+    container_name: nginx-ui
+    environment:
+      - NGINX_UI_SERVER_NAME=_
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./deploy/nginx:/etc/nginx/conf.d:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    container_name: eopds-db-demo
+    environment:
+      POSTGRES_DB: eopds_demo
+      POSTGRES_USER: eopds
+      POSTGRES_PASSWORD: eopds123
+    volumes:
+      - pgdata_demo:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eopds -d eopds_demo"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata_demo:

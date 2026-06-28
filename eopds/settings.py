@@ -123,7 +123,7 @@ WSGI_APPLICATION = "eopds.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "eopds",
+        "NAME": "eopds_demo",
         "USER": "eopds",
         "PASSWORD": "eopds123",
         "HOST": "db",

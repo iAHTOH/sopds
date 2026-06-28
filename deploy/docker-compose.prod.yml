@@ -1,0 +1,14 @@
+# EOPDS — Production сборка (для сервера)
+services:
+  eopds:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    container_name: eopds-prod
+    env_file: .env.prod
+    volumes:
+      - ../:/workspace
+      - /путь/к/книгам:/library:ro
+    ports:
+      - "127.0.0.1:8100:8100"
+    restart: unless-stopped

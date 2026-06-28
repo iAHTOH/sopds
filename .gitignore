@@ -28,6 +28,11 @@ docker-compose.yml
 # ================== Other ==================
 *.env
 *.pid
+
+# ================== Deploy configs (серверные конфиги) ==================
+deploy/.env.*
+deploy/nginx/*.conf
+
 eopds_web_backend/covers/
 opds_catalog/cache/
 .DS_Store
@@ -42,3 +47,4 @@ opds_catalog/cache/
 # ================== Build helpers ==================
 docker-compose.build.yml
 .env.build
+
