@@ -172,6 +172,12 @@ python3 manage.py eopds_telebot start --daemon
 
 ---
 
+
+## Поддержка
+
+- **Форум**: [https://eopds.ru](https://eopds.ru) — поддержка проекта, обсуждения, вопросы и обратная связь
+- **GitHub**: [https://github.com/iAHTOH/eopds](https://github.com/iAHTOH/eopds) — исходный код и issues
+
 ## Консольные команды
 
 ```bash
