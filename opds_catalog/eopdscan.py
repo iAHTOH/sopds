@@ -31,9 +31,9 @@ class opdsScanner:
         self.init_stats()
 
     def init_stats(self):
-        self.t1=datetime.timedelta(seconds=time.time())
-        self.t2=self.t1
-        self.t3=self.t1
+        self.t1=time.time()
+        self.t2=time.time()
+        
         self.books_added = 0
         self.books_skipped = 0
         self.books_deleted = 0
@@ -57,8 +57,9 @@ class opdsScanner:
 
 
     def log_stats(self):
-        self.t2=datetime.timedelta(seconds=time.time())
-        self.logger.info('Books added      : '+str(self.books_added))
+        self.t2=time.time()
+        opdsdb.flush_books()
+        self.logger.info('Books added      : '+str(opdsdb.get_books_added()))
         self.logger.info('Books skipped    : '+str(self.books_skipped))
         self.logger.info('Bad books        : '+str(self.bad_books))
         if config.EOPDS_DELETE_LOGICAL:
@@ -71,12 +72,13 @@ class opdsScanner:
         self.logger.info('Bad archives     : '+str(self.bad_archives))
 
         t=self.t2-self.t1
-        seconds=t.seconds%60
-        minutes=((t.seconds-seconds)//60)%60
-        hours=t.seconds//3600
-        self.logger.info('Time estimated:'+str(hours)+' hours, '+str(minutes)+' minutes, '+str(seconds)+' seconds.')
+        seconds=int(t%60)
+        minutes=int((t//60)%60)
+        hours=int(t//3600)
+        self.logger.info('Time estimated: '+str(hours)+' hours, '+str(minutes)+' minutes, '+str(seconds)+' seconds.')
 
     def scan_all(self):
+        opdsdb.clear_caches()
         self.init_stats()
         self.log_options()
         self.inp_cat = None
