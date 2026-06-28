@@ -123,11 +123,11 @@ WSGI_APPLICATION = "eopds.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "eopds_demo",
-        "USER": "eopds",
-        "PASSWORD": "eopds123",
-        "HOST": "db",
-        "PORT": "5432",
+        "NAME": os.environ.get("DB_NAME", "eopds"),
+        "USER": os.environ.get("DB_USER", "eopds"),
+        "PASSWORD": os.environ.get("DB_PASS", "eopds123"),
+        "HOST": os.environ.get("DB_HOST", "localhost"),
+        "PORT": os.environ.get("DB_PORT", "5432"),
     }
 }
 
